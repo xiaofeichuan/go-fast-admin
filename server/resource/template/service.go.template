@@ -1,0 +1,80 @@
+package service
+
+import (
+	"gin-fast-admin/server/app/admin/dto"
+	"gin-fast-admin/server/app/admin/model"
+	"gin-fast-admin/server/global"
+)
+
+type {{.ModelName}}Service struct{}
+
+// Page {{.FunctionName}}分页查询
+func ({{.ParamName}}Service *{{.ModelName}}Service) Page(query dto.{{.ModelName}}Query) (list []dto.{{.ModelName}}Vo, total int64, err error) {
+	db := global.DB.Model(&model.{{.ModelName}}{})
+	//查询条件
+	if query.NickName != "" {
+		db = db.Where("`nick_name` LIKE ?", "%"+query.NickName+"%")
+	}
+	{{- range $index, $item := .ColumnList -}}
+		{{- if eq $item.IsQuery  }}
+			if query.{{$item.GoField}}  != "" {
+				db = db.Where("`{{$item.ColumnName}} ` LIKE ?", "%"+query.{{$item.GoField}} +"%")
+			}
+		{{- end }}
+	{{- end }}
+
+	offset := (query.PageIndex - 1) * query.PageSize
+	//查询数据
+	err = db.Order("id DESC").Offset(offset).Limit(query.PageSize).Find(&list).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	//总条数
+	db.Count(&total)
+	return list, total, err
+}
+
+// Detail {{.FunctionName}}详情
+func ({{.ParamName}}Service *{{.ModelName}}Service) Detail(id uint64) (obj dto.{{.ModelName}}Vo, err error) {
+	err = global.DB.Model(&model.{{.ModelName}}{}).Where("id = ?", id).Scan(&obj).Error
+	return obj, err
+}
+
+// List {{.FunctionName}}列表
+func ({{.ParamName}}Service *{{.ModelName}}Service) List() (objs []dto.{{.ModelName}}Vo, err error) {
+	err = global.DB.Model(&model.{{.ModelName}}{}).Scan(&objs).Error
+	return objs, err
+}
+
+// Add 添加{{.FunctionName}}
+func ({{.ParamName}}Service *{{.ModelName}}Service) Add(createDto dto.{{.ModelName}}CreateDto) error {
+	var user = &model.{{.ModelName}}{
+		{{- range $index, $item := .ColumnList -}}
+			{{- if eq $item.IsEdit  }}
+				{{$item.GoField}} :  createDto.{{$item.GoType}}
+			{{- end }}
+		{{- end }}
+	}
+	err := global.DB.Create(user).Error
+	return err
+}
+
+// Update 更新{{.FunctionName}}
+func ({{.ParamName}}Service *{{.ModelName}}Service) Update(updateDto dto.{{.ModelName}}UpdateDto) error {
+	var user = &model.{{.ModelName}}{
+		{{- range $index, $item := .ColumnList -}}
+				Id:       updateDto.Id,
+			{{- if eq $item.IsEdit  }}
+				{{$item.GoField}} :  updateDto.{{$item.GoType}}
+			{{- end }}
+		{{- end }}
+	}
+	err := global.DB.Updates(user).Error
+	return err
+}
+
+// Delete 删除{{.FunctionName}}
+func ({{.ParamName}}Service *{{.ModelName}}Service) Delete(id uint64) error {
+	err := global.DB.Delete(&model.{{.ModelName}}{}, "id = ?", id).Error
+	return err
+}
