@@ -16,11 +16,7 @@ type SysTableApi struct{}
 // @Router /sysTable/getDBTableInfos [get]
 func (sysTableApi *SysTableApi) GetDBTableInfos(c *gin.Context) {
 	tableInfos, err := genTableService.GetDBTableInfos()
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-	} else {
-		response.SuccessWithData(tableInfos, c)
-	}
+	response.Complete(tableInfos, err, c)
 }
 
 // ImportTables
@@ -42,11 +38,8 @@ func (sysTableApi *SysTableApi) ImportTables(c *gin.Context) {
 	}
 	// 生成表字段
 	err = genTableColumnService.ImportGenTableColumn(tableNames, tables)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-	} else {
-		response.Success(c)
-	}
+	response.CompleteWithMessage(err, c)
+
 }
 
 // PreviewCode
@@ -57,6 +50,6 @@ func (sysTableApi *SysTableApi) ImportTables(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Router /sysTable/previewCode [get]
 func (sysTableApi *SysTableApi) PreviewCode(c *gin.Context) {
-	err := genTableService.PreviewCode(1)
-	response.Complete(err, c)
+	vos, err := genTableService.PreviewCode(1)
+	response.Complete(vos, err, c)
 }

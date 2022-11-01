@@ -49,6 +49,10 @@ func FailWithDetail(data interface{}, message string, c *gin.Context) {
 	Result(200, false, data, message, c)
 }
 
+func FailWithMessage(message string, c *gin.Context) {
+	FailWithDetail(nil, message, c)
+}
+
 //func Success(c *gin.Context) {
 //	SuccessWithData(nil, c)
 //}
@@ -63,9 +67,7 @@ func FailWithDetail(data interface{}, message string, c *gin.Context) {
 //	FailWithData(nil, c)
 //}
 //
-//func FailWithMessage(message string, c *gin.Context) {
-//	FailWithDetailed(nil, message, c)
-//}
+
 //
 //func FailWithData(data interface{}, c *gin.Context) {
 //	FailWithDetailed(data, "请求失败", c)
