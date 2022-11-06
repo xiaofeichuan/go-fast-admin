@@ -1,0 +1,22 @@
+package router
+
+import (
+	"gin-fast-admin/server/app/admin/api"
+	"github.com/gin-gonic/gin"
+)
+
+type {{.ModelName}}Router struct{}
+
+// Init{{.ModelName}}PrivateRouter 初始化权限路由
+func ({{.ParamName}}Router  *{{.ModelName}}Router) Init{{.ModelName}}PrivateRouter(routerGroup *gin.RouterGroup) {
+	var {{.ParamName}}Api = api.{{.ModelName}}Api{}
+	{{.BusinessName}}Router := routerGroup.Group("{{.ParamName}}")
+	{
+		{{.BusinessName}}Router.GET("page", {{.ParamName}}Api.Page)      // {{.FunctionName}}分页查询
+		{{.BusinessName}}Router.GET("detail", {{.ParamName}}Api.Detail)  // {{.FunctionName}}详情
+		{{.BusinessName}}Router.GET("list", {{.ParamName}}Api.List)      // {{.FunctionName}}列表
+		{{.BusinessName}}Router.POST("add", {{.ParamName}}Api.Add)       // 添加{{.FunctionName}}
+		{{.BusinessName}}Router.POST("update", {{.ParamName}}Api.Update) // 更新{{.FunctionName}}
+		{{.BusinessName}}Router.POST("delete", {{.ParamName}}Api.Delete) // 删除{{.FunctionName}}
+	}
+}

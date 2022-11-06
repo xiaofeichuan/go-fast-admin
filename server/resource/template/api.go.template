@@ -1,0 +1,94 @@
+package api
+
+import (
+	"gin-fast-admin/server/app/admin/dto"
+	"gin-fast-admin/server/common/dto/request"
+	"gin-fast-admin/server/common/dto/response"
+	"github.com/gin-gonic/gin"
+)
+
+type {{.ModelName}}Api struct{}
+
+// Page
+// @Tags {{.FunctionName}}
+// @Summary {{.FunctionName}}分页查询
+// @Security ApiKeyAuth
+// @Param data query dto.{{.ModelName}}Query true "请求参数"
+// @Success 200 {object} response.JsonResult{data=response.PageResult{list=[]dto.{{.ModelName}}Vo}}
+// @Router /{{.ParamName}}/page [get]
+func ({{.ParamName}}Api *{{.ModelName}}Api) Page(c *gin.Context) {
+	var query dto.{{.ModelName}}Query
+	c.ShouldBindQuery(&query)
+	list, total, err := userService.Page(query)
+	response.Complete(response.PageResult{
+		List:       list,
+		TotalCount: total,
+	}, err, c)
+}
+
+// Detail
+// @Tags {{.FunctionName}}
+// @Summary {{.FunctionName}}详情
+// @Security ApiKeyAuth
+// @Param data query request.IdInfoDto true "用户id"
+// @Success 200 {object} response.JsonResult{data=dto.{{.ModelName}}Vo}
+// @Router /{{.ParamName}}/detail [get]
+func ({{.ParamName}}Api *{{.ModelName}}Api) Detail(c *gin.Context) {
+	var idInfoDto request.IdInfoDto
+	c.ShouldBindQuery(&idInfoDto)
+	obj, err := userService.Detail(idInfoDto.Id)
+	response.Complete(obj, err, c)
+}
+
+// List
+// @Tags {{.FunctionName}}
+// @Summary {{.FunctionName}}列表
+// @Security ApiKeyAuth
+// @Success 200 {object} response.JsonResult{data=[]dto.{{.ModelName}}Vo}
+// @Router /{{.ParamName}}/list [get]
+func ({{.ParamName}}Api *{{.ModelName}}Api) List(c *gin.Context) {
+	objs, err := userService.List()
+	response.Complete(objs, err, c)
+}
+
+// Add
+// @Tags {{.FunctionName}}
+// @Summary 添加{{.FunctionName}}
+// @Security ApiKeyAuth
+// @Param data body dto.{{.ModelName}}CreateDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.ParamName}}/add [post]
+func ({{.ParamName}}Api *{{.ModelName}}Api) Add(c *gin.Context) {
+	var createDto dto.{{.ModelName}}CreateDto
+	c.ShouldBindJSON(&createDto)
+	err := userService.Add(createDto)
+	response.CompleteWithMessage(err, c)
+}
+
+// Update
+// @Tags {{.FunctionName}}
+// @Summary 更新{{.FunctionName}}
+// @Security ApiKeyAuth
+// @Param data body dto.{{.ModelName}}UpdateDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.ParamName}}/update [post]
+func ({{.ParamName}}Api *{{.ModelName}}Api) Update(c *gin.Context) {
+	var updateDto dto.{{.ModelName}}UpdateDto
+	c.ShouldBindJSON(&updateDto)
+	err := userService.Update(updateDto)
+	response.CompleteWithMessage(err, c)
+}
+
+// Delete
+// @Tags {{.FunctionName}}
+// @Summary 删除{{.FunctionName}}
+// @Security ApiKeyAuth
+// @Param data body request.IdInfoDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.ParamName}}/delete [post]
+func ({{.ParamName}}Api *{{.ModelName}}Api) Delete(c *gin.Context) {
+	var idInfoDto request.IdInfoDto
+	c.ShouldBindJSON(&idInfoDto)
+	err := userService.Delete(idInfoDto.Id)
+	response.CompleteWithMessage(err, c)
+}

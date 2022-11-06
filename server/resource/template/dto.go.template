@@ -1,0 +1,37 @@
+package dto
+
+import "gin-fast-admin/server/common/dto/request"
+
+// SysUserCreateDto 创建
+type SysUserCreateDto struct {
+	{{- range $index, $item := .ColumnList -}}
+		{{- if eq $item.IsEdit  }}
+			{{$item.GoField}}   {{$item.GoType}} `json:"{{$item.ParamName}}"`   //{{$item.ColumnComment}}
+		{{- end }}
+	{{- end }}
+}
+
+// SysUserUpdateDto 更新
+type SysUserUpdateDto struct {
+	Id uint64 `json:"id"` //编号
+	SysUserCreateDto
+}
+
+// SysUserQuery 查询
+type SysUserQuery struct {
+	request.PageQuery
+	{{- range $index, $item := .ColumnList -}}
+		{{- if eq $item.IsQuery  }}
+			{{$item.GoField}}   {{$item.GoType}} `json:"{{$item.ParamName}}"form:"{{$item.ParamName}}"`   //{{$item.ColumnComment}}
+		{{- end }}
+	{{- end }}
+}
+
+// SysUserVo 输出对象
+type SysUserVo struct {
+	{{- range $index, $item := .ColumnList -}}
+		{{- if eq $item.IsList  }}
+		{{$item.GoField}}   {{$item.GoType}} `json:"{{$item.ParamName}}"`   //{{$item.ColumnComment}}
+		{{- end }}
+	{{- end }}
+}

@@ -1,0 +1,419 @@
+definitions:
+  dto.SysUserCreateDto:
+    properties:
+      account:
+        description: 账号
+        type: string
+      avatar:
+        description: 头像地址
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      nickName:
+        description: 用户昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      sex:
+        description: 用户性别（0未知，1男，2女）
+        type: integer
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      userName:
+        description: 用户名
+        type: string
+      userType:
+        description: 用户类型（0普通账号，1超级管理员）
+        type: integer
+    type: object
+  dto.SysUserUpdateDto:
+    properties:
+      account:
+        description: 账号
+        type: string
+      avatar:
+        description: 头像地址
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      id:
+        description: 编号
+        type: integer
+      nickName:
+        description: 用户昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      sex:
+        description: 用户性别（0未知，1男，2女）
+        type: integer
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      userName:
+        description: 用户名
+        type: string
+      userType:
+        description: 用户类型（0普通账号，1超级管理员）
+        type: integer
+    type: object
+  dto.SysUserVo:
+    properties:
+      account:
+        description: 用户账号
+        type: string
+      avatar:
+        description: 头像地址
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      nickName:
+        description: 用户昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      sex:
+        description: 用户性别（0未知，1男，2女）
+        type: integer
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      userType:
+        description: 用户类型（0普通账号，1超级管理员）
+        type: integer
+    type: object
+  dto.TableInfoResponse:
+    properties:
+      columnList:
+        items:
+          $ref: '#/definitions/model.SysGenTableColumn'
+        type: array
+      createTime:
+        type: string
+      functionName:
+        type: string
+      modelName:
+        type: string
+      paramName:
+        type: string
+      tableComment:
+        type: string
+      tableName:
+        type: string
+      updateTime:
+        type: string
+    type: object
+  model.SysGenTableColumn:
+    properties:
+      columnComment:
+        type: string
+      columnName:
+        type: string
+      columnType:
+        type: string
+      createdAt:
+        type: string
+      goField:
+        type: string
+      goType:
+        type: string
+      id:
+        type: integer
+      isEdit:
+        type: boolean
+      isList:
+        type: boolean
+      isPk:
+        type: boolean
+      isQuery:
+        type: boolean
+      jsonField:
+        type: string
+      queryMethod:
+        type: string
+      tableId:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  request.IdInfoDto:
+    properties:
+      id:
+        description: id编号
+        type: integer
+    type: object
+  response.JsonResult:
+    properties:
+      code:
+        description: 状态码
+        type: integer
+      data:
+        description: 数据
+      message:
+        description: 消息
+        type: string
+      success:
+        description: 是否成功
+        type: boolean
+    type: object
+  response.PageResult:
+    properties:
+      list:
+        description: 数据
+      totalCount:
+        description: 总条数
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: gin-fast-admin 接口文档
+  title: 系统模块
+  version: 1.0.0
+paths:
+  /sysTable/getDBTableInfos:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.TableInfoResponse'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前数据库所有表信息
+      tags:
+      - 代码生成器
+  /sysTable/importTables:
+    post:
+      parameters:
+      - description: 表名
+        in: body
+        name: tableNames
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 导入表
+      tags:
+      - 代码生成器
+  /sysTable/previewCode:
+    get:
+      parameters:
+      - description: 表名
+        in: query
+        items:
+          type: string
+        name: tableId
+        required: true
+        type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 预览代码
+      tags:
+      - 代码生成器
+  /sysUser/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserCreateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户
+      tags:
+      - 用户
+  /sysUser/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - 用户
+  /sysUser/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysUserVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户详情
+      tags:
+      - 用户
+  /sysUser/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysUserVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户列表
+      tags:
+      - 用户
+  /sysUser/page:
+    get:
+      parameters:
+      - description: 用户昵称
+        in: query
+        name: nickName
+        type: string
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysUserVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户分页查询
+      tags:
+      - 用户
+  /sysUser/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户
+      tags:
+      - 用户
+  /test/demo:
+    post:
+      parameters:
+      - description: 表名
+        in: body
+        name: tableNames
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 测试demo
+      tags:
+      - 测试
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,17 @@
+package model
+
+import "gorm.io/gorm"
+
+type {{.ModelName}} struct {
+	{{- range $index, $item := .ColumnList -}}
+		{{- if eq $item.ColumnName "id" }}
+			Id        uint64         `json:"id" gorm:"primaryKey;comment:编号"`
+		{{- else }}
+			{{$item.GoField}}   {{$item.GoType}} `json:"{{$item.ParamName}}" gorm:"comment:{{$item.ColumnComment}}"`
+		{{- end }}
+	{{- end }}
+}
+
+func ({{.ModelName}}) TableName() string {
+	return "{{.TableName}}"
+}
