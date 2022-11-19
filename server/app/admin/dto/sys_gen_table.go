@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"gin-fast-admin/server/app/admin/model"
+	"go-fast-admin/server/app/admin/model"
 	"time"
 )
 

@@ -1,5 +1,27 @@
 definitions:
-  dto.SysUserCreateDto:
+  dto.CaptchaVo:
+    properties:
+      captchaBase64:
+        type: string
+      captchaId:
+        type: string
+    type: object
+  dto.LoginDto:
+    properties:
+      account:
+        description: 账号
+        type: string
+      captcha:
+        description: 验证码
+        type: string
+      captchaId:
+        description: 验证码ID
+        type: string
+      password:
+        description: 密码
+        type: string
+    type: object
+  dto.SysUserAddDto:
     properties:
       account:
         description: 账号
@@ -9,9 +31,6 @@ definitions:
         type: string
       email:
         description: 用户邮箱
-        type: string
-      nickName:
-        description: 用户昵称
         type: string
       password:
         description: 密码
@@ -29,7 +48,7 @@ definitions:
         description: 帐号状态（0正常 1停用）
         type: integer
       userName:
-        description: 用户名
+        description: 用户名称
         type: string
       userType:
         description: 用户类型（0普通账号，1超级管理员）
@@ -39,6 +58,39 @@ definitions:
     properties:
       account:
         description: 账号
+        type: string
+      avatar:
+        description: 头像地址
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      id:
+        description: 编号
+        type: integer
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      sex:
+        description: 用户性别（0未知，1男，2女）
+        type: integer
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      userName:
+        description: 用户名称
+        type: string
+      userType:
+        description: 用户类型（0普通账号，1超级管理员）
+        type: integer
+    type: object
+  dto.SysUserVo:
+    properties:
+      account:
+        description: 用户账号
         type: string
       avatar:
         description: 头像地址
@@ -67,65 +119,40 @@ definitions:
       status:
         description: 帐号状态（0正常 1停用）
         type: integer
-      userName:
-        description: 用户名
-        type: string
       userType:
         description: 用户类型（0普通账号，1超级管理员）
         type: integer
     type: object
-  dto.SysUserVo:
+  dto.TableInfoVo:
     properties:
-      account:
-        description: 用户账号
+      businessName:
+        description: 业务名称
         type: string
-      avatar:
-        description: 头像地址
-        type: string
-      email:
-        description: 用户邮箱
-        type: string
-      nickName:
-        description: 用户昵称
-        type: string
-      password:
-        description: 密码
-        type: string
-      phone:
-        description: 手机号码
-        type: string
-      remark:
-        description: 备注
-        type: string
-      sex:
-        description: 用户性别（0未知，1男，2女）
-        type: integer
-      status:
-        description: 帐号状态（0正常 1停用）
-        type: integer
-      userType:
-        description: 用户类型（0普通账号，1超级管理员）
-        type: integer
-    type: object
-  dto.TableInfoResponse:
-    properties:
       columnList:
+        description: 字段列表
         items:
           $ref: '#/definitions/model.SysGenTableColumn'
         type: array
       createTime:
+        description: 创建时间
         type: string
       functionName:
+        description: 功能名称
         type: string
       modelName:
+        description: 实体名称
         type: string
       paramName:
+        description: 参数名称
         type: string
       tableComment:
+        description: 表注释
         type: string
       tableName:
+        description: 表名称
         type: string
       updateTime:
+        description: 更新时间
         type: string
     type: object
   model.SysGenTableColumn:
@@ -191,10 +218,58 @@ definitions:
     type: object
 info:
   contact: {}
-  description: gin-fast-admin 接口文档
+  description: go-fast-admin 接口文档
   title: 系统模块
   version: 1.0.0
 paths:
+  /captcha:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CaptchaVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 生成验证码
+      tags:
+      - 授权
+  /getUserInfo:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 授权
+  /login:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户登录
+      tags:
+      - 授权
   /sysTable/getDBTableInfos:
     get:
       responses:
@@ -206,7 +281,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/dto.TableInfoResponse'
+                    $ref: '#/definitions/dto.TableInfoVo'
                   type: array
               type: object
       security:
@@ -255,7 +330,7 @@ paths:
       summary: 预览代码
       tags:
       - 代码生成器
-  /sysUser/add:
+  /system/user/add:
     post:
       parameters:
       - description: 请求参数
@@ -263,7 +338,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dto.SysUserCreateDto'
+          $ref: '#/definitions/dto.SysUserAddDto'
       responses:
         "200":
           description: OK
@@ -274,7 +349,7 @@ paths:
       summary: 添加用户
       tags:
       - 用户
-  /sysUser/delete:
+  /system/user/delete:
     post:
       parameters:
       - description: 请求参数
@@ -293,7 +368,7 @@ paths:
       summary: 删除用户
       tags:
       - 用户
-  /sysUser/detail:
+  /system/user/detail:
     get:
       parameters:
       - description: id编号
@@ -315,7 +390,7 @@ paths:
       summary: 获取用户详情
       tags:
       - 用户
-  /sysUser/list:
+  /system/user/list:
     get:
       responses:
         "200":
@@ -334,7 +409,7 @@ paths:
       summary: 用户列表
       tags:
       - 用户
-  /sysUser/page:
+  /system/user/page:
     get:
       parameters:
       - description: 用户昵称
@@ -371,7 +446,7 @@ paths:
       summary: 用户分页查询
       tags:
       - 用户
-  /sysUser/update:
+  /system/user/update:
     post:
       parameters:
       - description: 请求参数

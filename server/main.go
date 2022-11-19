@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	docs "gin-fast-admin/server/docs" //注意：需要引用docs的路径，否则打开swagger时会出现错误
-	"gin-fast-admin/server/global"
-	"gin-fast-admin/server/initialize"
+	docs "go-fast-admin/server/docs" //注意：需要引用docs的路径，否则打开swagger时会出现错误
+	"go-fast-admin/server/global"
+	"go-fast-admin/server/initialize"
 	"net/http"
 	"time"
 
@@ -14,7 +14,7 @@ import (
 
 // @title 系统模块
 // @version 1.0.0
-// @description gin-fast-admin 接口文档
+// @description go-fast-admin 接口文档
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -29,7 +29,7 @@ func main() {
 	var routers = initialize.Routers()
 
 	//swagger文档
-	docs.SwaggerInfo.Title = "gin-fast-admin"
+	docs.SwaggerInfo.Title = "go-fast-admin"
 	docs.SwaggerInfo.Description = "Swagger Admin API"
 	docs.SwaggerInfo.Version = "1.0"
 	routers.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

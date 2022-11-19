@@ -1,6 +1,6 @@
 package model
 
-import "gin-fast-admin/server/common"
+import "go-fast-admin/server/common"
 
 type SysGenTable struct {
 	Id           uint64 `json:"id" gorm:"primaryKey;comment:Id"`

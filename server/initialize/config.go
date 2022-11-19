@@ -2,8 +2,8 @@ package initialize
 
 import (
 	"fmt"
-	"gin-fast-admin/server/config"
 	"github.com/spf13/viper"
+	"go-fast-admin/server/config"
 )
 
 func InitConfig() *config.Config {

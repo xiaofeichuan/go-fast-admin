@@ -1,9 +1,9 @@
 package service
 
 import (
-	"gin-fast-admin/server/app/admin/dto"
-	"gin-fast-admin/server/app/admin/model"
-	"gin-fast-admin/server/global"
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/app/admin/model"
+	"go-fast-admin/server/global"
 )
 
 type SysUserService struct{}
@@ -39,18 +39,18 @@ func (sysUserService *SysUserService) List() (objs []dto.SysUserVo, err error) {
 }
 
 // Add 添加用户
-func (sysUserService *SysUserService) Add(createDto dto.SysUserCreateDto) error {
+func (sysUserService *SysUserService) Add(addDto dto.SysUserAddDto) error {
 	var user = &model.SysUser{
-		Account:  createDto.Account,
-		NickName: createDto.NickName,
-		UserType: createDto.UserType,
-		Email:    createDto.Email,
-		Phone:    createDto.Phone,
-		Password: createDto.Password,
-		Sex:      createDto.Sex,
-		Avatar:   createDto.Avatar,
-		Status:   createDto.Status,
-		Remark:   createDto.Remark,
+		Account:  addDto.Account,
+		UserName: addDto.UserName,
+		UserType: addDto.UserType,
+		Email:    addDto.Email,
+		Phone:    addDto.Phone,
+		Password: addDto.Password,
+		Sex:      addDto.Sex,
+		Avatar:   addDto.Avatar,
+		Status:   addDto.Status,
+		Remark:   addDto.Remark,
 	}
 	err := global.DB.Create(user).Error
 	return err
@@ -61,11 +61,10 @@ func (sysUserService *SysUserService) Update(updateDto dto.SysUserUpdateDto) err
 	var user = &model.SysUser{
 		Id:       updateDto.Id,
 		Account:  updateDto.Account,
-		NickName: updateDto.NickName,
+		UserName: updateDto.UserName,
 		UserType: updateDto.UserType,
 		Email:    updateDto.Email,
 		Phone:    updateDto.Phone,
-		Password: updateDto.Password,
 		Sex:      updateDto.Sex,
 		Avatar:   updateDto.Avatar,
 		Status:   updateDto.Status,
@@ -80,3 +79,10 @@ func (sysUserService *SysUserService) Delete(id uint64) error {
 	err := global.DB.Delete(&model.SysUser{}, "id = ?", id).Error
 	return err
 }
+
+//
+//// ResetPwd 重置密码
+//func (sysUserService *SysUserService) ResetPwd(resetPwdDto dto.ResetPwdDto) error {
+//
+//	pwd := utils.Md5(resetPwdDto.Password + user.Salt)
+//}

@@ -3,10 +3,10 @@ package service
 import (
 	"bytes"
 	"fmt"
-	"gin-fast-admin/server/app/admin/dto"
-	"gin-fast-admin/server/app/admin/model"
-	"gin-fast-admin/server/global"
-	"gin-fast-admin/server/utils"
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/app/admin/model"
+	"go-fast-admin/server/global"
+	"go-fast-admin/server/utils"
 	"strings"
 	"text/template"
 )
@@ -123,7 +123,7 @@ func GetTableDetail(tableId uint64) (table dto.TableInfoVo) {
 
 	var columnList *[]model.SysGenTableColumn
 	global.DB.Model(model.SysGenTableColumn{TableId: tableId}).Scan(&columnList)
-	table.ParamName = utils.stringUtil.ToCamelCase(table.TableName)
+	table.ParamName = utils.ToCamelCase(table.TableName)
 	table.ColumnList = columnList
 	fmt.Println(table)
 	return table

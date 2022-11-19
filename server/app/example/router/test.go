@@ -1,8 +1,8 @@
 package router
 
 import (
-	"gin-fast-admin/server/app/example/api"
 	"github.com/gin-gonic/gin"
+	"go-fast-admin/server/app/example/api"
 )
 
 type TestRouter struct{}

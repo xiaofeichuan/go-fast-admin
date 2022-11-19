@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
-	"gin-fast-admin/server/app/admin/dto"
-	"gin-fast-admin/server/app/admin/model"
-	"gin-fast-admin/server/global"
-	"gin-fast-admin/server/utils"
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/app/admin/model"
+	"go-fast-admin/server/global"
+	"go-fast-admin/server/utils"
 )
 
 type SysGenTableColumnService struct{}

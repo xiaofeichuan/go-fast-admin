@@ -1,7 +1,7 @@
 package global
 
 import (
-	"gin-fast-admin/server/config"
+	"go-fast-admin/server/config"
 	"gorm.io/gorm"
 )
 

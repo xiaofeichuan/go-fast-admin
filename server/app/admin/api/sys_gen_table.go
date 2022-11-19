@@ -2,8 +2,8 @@ package api
 
 import (
 	"fmt"
-	"gin-fast-admin/server/common/dto/response"
 	"github.com/gin-gonic/gin"
+	"go-fast-admin/server/common/dto/response"
 )
 
 type SysTableApi struct{}
@@ -11,7 +11,7 @@ type SysTableApi struct{}
 // GetDBTableInfos
 // @Summary 获取当前数据库所有表信息
 // @Tags 代码生成器
-// @Success 200 {object} response.JsonResult{data=[]dto.TableInfoResponse}
+// @Success 200 {object} response.JsonResult{data=[]dto.TableInfoVo}
 // @Security ApiKeyAuth
 // @Router /sysTable/getDBTableInfos [get]
 func (sysTableApi *SysTableApi) GetDBTableInfos(c *gin.Context) {

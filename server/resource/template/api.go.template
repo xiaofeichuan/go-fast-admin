@@ -1,9 +1,9 @@
 package api
 
 import (
-	"gin-fast-admin/server/app/admin/dto"
-	"gin-fast-admin/server/common/dto/request"
-	"gin-fast-admin/server/common/dto/response"
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/common/dto/request"
+	"go-fast-admin/server/common/dto/response"
 	"github.com/gin-gonic/gin"
 )
 

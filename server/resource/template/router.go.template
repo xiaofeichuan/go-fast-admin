@@ -1,7 +1,7 @@
 package router
 
 import (
-	"gin-fast-admin/server/app/admin/api"
+	"go-fast-admin/server/app/admin/api"
 	"github.com/gin-gonic/gin"
 )
 

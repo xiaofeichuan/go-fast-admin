@@ -1,6 +1,6 @@
 package dto
 
-import "gin-fast-admin/server/common/dto/request"
+import "go-fast-admin/server/common/dto/request"
 
 // SysUserCreateDto 创建
 type SysUserCreateDto struct {

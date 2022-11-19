@@ -2,13 +2,10 @@ package utils
 
 import "strings"
 
-type StringUtil struct {
-}
-
 // ToPascalCase
 // 蛇形命名法=>帕斯卡命名法
 // 例如：user_name->UserName
-func (stringUtil *StringUtil) ToPascalCase(snakeCase string) string {
+func ToPascalCase(snakeCase string) string {
 	var result string
 	nameList := strings.Split(snakeCase, "_")
 	for i := 0; i < len(nameList); i++ {
@@ -25,7 +22,7 @@ func (stringUtil *StringUtil) ToPascalCase(snakeCase string) string {
 // ToCamelCase
 // 蛇形命名法=>驼峰式命名法
 // 例如：user_name->userName
-func (stringUtil *StringUtil) ToCamelCase(snakeCase string) string {
+func ToCamelCase(snakeCase string) string {
 	var result string
 	nameList := strings.Split(snakeCase, "_")
 	for i := 0; i < len(nameList); i++ {
@@ -46,7 +43,7 @@ func (stringUtil *StringUtil) ToCamelCase(snakeCase string) string {
 
 // GetGoType 获取go的数据类型
 // mysql数据类型=>go数据类型
-func (stringUtil *StringUtil) GetGoType(columnName string, columnType string) string {
+func GetGoType(columnName string, columnType string) string {
 	if strings.Contains(columnType, "int") {
 		if columnName == "id" || strings.Contains(columnType, "_id") {
 			return "uint64"

@@ -2,7 +2,7 @@ package initialize
 
 import (
 	"fmt"
-	"gin-fast-admin/server/global"
+	"go-fast-admin/server/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

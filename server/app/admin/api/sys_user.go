@@ -1,10 +1,10 @@
 package api
 
 import (
-	"gin-fast-admin/server/app/admin/dto"
-	"gin-fast-admin/server/common/dto/request"
-	"gin-fast-admin/server/common/dto/response"
 	"github.com/gin-gonic/gin"
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/common/dto/request"
+	"go-fast-admin/server/common/dto/response"
 )
 
 type SysUserApi struct{}
@@ -15,7 +15,7 @@ type SysUserApi struct{}
 // @Security ApiKeyAuth
 // @Param data query dto.SysUserQuery true "请求参数"
 // @Success 200 {object} response.JsonResult{data=response.PageResult{list=[]dto.SysUserVo}}
-// @Router /sysUser/page [get]
+// @Router /system/user/page [get]
 func (sysUserApi *SysUserApi) Page(c *gin.Context) {
 	var query dto.SysUserQuery
 	c.ShouldBindQuery(&query)
@@ -32,7 +32,7 @@ func (sysUserApi *SysUserApi) Page(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param data query request.IdInfoDto true "用户id"
 // @Success 200 {object} response.JsonResult{data=dto.SysUserVo}
-// @Router /sysUser/detail [get]
+// @Router /system/user/detail [get]
 func (sysUserApi *SysUserApi) Detail(c *gin.Context) {
 	var idInfoDto request.IdInfoDto
 	c.ShouldBindQuery(&idInfoDto)
@@ -45,7 +45,7 @@ func (sysUserApi *SysUserApi) Detail(c *gin.Context) {
 // @Summary 用户列表
 // @Security ApiKeyAuth
 // @Success 200 {object} response.JsonResult{data=[]dto.SysUserVo}
-// @Router /sysUser/list [get]
+// @Router /system/user/list [get]
 func (sysUserApi *SysUserApi) List(c *gin.Context) {
 	objs, err := userService.List()
 	response.Complete(objs, err, c)
@@ -55,13 +55,13 @@ func (sysUserApi *SysUserApi) List(c *gin.Context) {
 // @Tags 用户
 // @Summary 添加用户
 // @Security ApiKeyAuth
-// @Param data body dto.SysUserCreateDto true "请求参数"
+// @Param data body dto.SysUserAddDto true "请求参数"
 // @Success 200 {object} response.JsonResult
-// @Router /sysUser/add [post]
+// @Router /system/user/add [post]
 func (sysUserApi *SysUserApi) Add(c *gin.Context) {
-	var createDto dto.SysUserCreateDto
-	c.ShouldBindJSON(&createDto)
-	err := userService.Add(createDto)
+	var addDto dto.SysUserAddDto
+	c.ShouldBindJSON(&addDto)
+	err := userService.Add(addDto)
 	response.CompleteWithMessage(err, c)
 }
 
@@ -71,7 +71,7 @@ func (sysUserApi *SysUserApi) Add(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param data body dto.SysUserUpdateDto true "请求参数"
 // @Success 200 {object} response.JsonResult
-// @Router /sysUser/update [post]
+// @Router /system/user/update [post]
 func (sysUserApi *SysUserApi) Update(c *gin.Context) {
 	var updateDto dto.SysUserUpdateDto
 	c.ShouldBindJSON(&updateDto)
@@ -85,7 +85,7 @@ func (sysUserApi *SysUserApi) Update(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param data body request.IdInfoDto true "请求参数"
 // @Success 200 {object} response.JsonResult
-// @Router /sysUser/delete [post]
+// @Router /system/user/delete [post]
 func (sysUserApi *SysUserApi) Delete(c *gin.Context) {
 	var idInfoDto request.IdInfoDto
 	c.ShouldBindJSON(&idInfoDto)
@@ -93,13 +93,32 @@ func (sysUserApi *SysUserApi) Delete(c *gin.Context) {
 	response.CompleteWithMessage(err, c)
 }
 
-//// UserLogin
-//// @Summary
+//
+//// ResetPwd
 //// @Tags 用户
-//// @Success 200 {object} response.JsonResult
+//// @Summary 重置密码
 //// @Security ApiKeyAuth
-//// @Param userId query int true "用户id"
-//// @Router /user/login [post]
-//func (sysUserApi *SysUserApi) UserLogin(c *gin.Context) {
-//	response.Success(c)
+//// @Param data body dto.ResetPwdDto true "请求参数"
+//// @Success 200 {object} response.JsonResult
+//// @Router /system/user/resetPwd [post]
+//func (sysUserApi *SysUserApi) ResetPwd(c *gin.Context) {
+//	var resetPwdDto dto.ResetPwdDto
+//	c.ShouldBindJSON(&resetPwdDto)
+//	err := userService.ResetPwd(resetPwdDto)
+//	response.CompleteWithMessage(err, c)
+//}
+
+//
+//// UpdatePwd
+//// @Tags 用户
+//// @Summary 更新密码
+//// @Security ApiKeyAuth
+//// @Param data body dto.UpdatePwdDto true "请求参数"
+//// @Success 200 {object} response.JsonResult
+//// @Router /system/user/updatePwd [post]
+//func (sysUserApi *SysUserApi) UpdatePwd(c *gin.Context) {
+//	var loginDto dto.LoginDto
+//	c.ShouldBindJSON(&loginDto)
+//	token, err := userService.Login(loginDto)
+//	response.Complete(token, err, c)
 //}

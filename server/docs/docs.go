@@ -16,6 +16,92 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/captcha": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "授权"
+                ],
+                "summary": "生成验证码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.JsonResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.CaptchaVo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/getUserInfo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "授权"
+                ],
+                "summary": "获取用户信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "授权"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
         "/sysTable/getDBTableInfos": {
             "get": {
                 "security": [
@@ -41,7 +127,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/dto.TableInfoResponse"
+                                                "$ref": "#/definitions/dto.TableInfoVo"
                                             }
                                         }
                                     }
@@ -120,7 +206,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/add": {
+        "/system/user/add": {
             "post": {
                 "security": [
                     {
@@ -138,7 +224,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.SysUserCreateDto"
+                            "$ref": "#/definitions/dto.SysUserAddDto"
                         }
                     }
                 ],
@@ -152,7 +238,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/delete": {
+        "/system/user/delete": {
             "post": {
                 "security": [
                     {
@@ -184,7 +270,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/detail": {
+        "/system/user/detail": {
             "get": {
                 "security": [
                     {
@@ -225,7 +311,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/list": {
+        "/system/user/list": {
             "get": {
                 "security": [
                     {
@@ -261,7 +347,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/page": {
+        "/system/user/page": {
             "get": {
                 "security": [
                     {
@@ -329,7 +415,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sysUser/update": {
+        "/system/user/update": {
             "post": {
                 "security": [
                     {
@@ -398,7 +484,39 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.SysUserCreateDto": {
+        "dto.CaptchaVo": {
+            "type": "object",
+            "properties": {
+                "captchaBase64": {
+                    "type": "string"
+                },
+                "captchaId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginDto": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "账号",
+                    "type": "string"
+                },
+                "captcha": {
+                    "description": "验证码",
+                    "type": "string"
+                },
+                "captchaId": {
+                    "description": "验证码ID",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SysUserAddDto": {
             "type": "object",
             "properties": {
                 "account": {
@@ -411,10 +529,6 @@ const docTemplate = `{
                 },
                 "email": {
                     "description": "用户邮箱",
-                    "type": "string"
-                },
-                "nickName": {
-                    "description": "用户昵称",
                     "type": "string"
                 },
                 "password": {
@@ -438,7 +552,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "userName": {
-                    "description": "用户名",
+                    "description": "用户名称",
                     "type": "string"
                 },
                 "userType": {
@@ -452,6 +566,51 @@ const docTemplate = `{
             "properties": {
                 "account": {
                     "description": "账号",
+                    "type": "string"
+                },
+                "avatar": {
+                    "description": "头像地址",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "用户邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "编号",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "手机号码",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "sex": {
+                    "description": "用户性别（0未知，1男，2女）",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "帐号状态（0正常 1停用）",
+                    "type": "integer"
+                },
+                "userName": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "userType": {
+                    "description": "用户类型（0普通账号，1超级管理员）",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.SysUserVo": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "用户账号",
                     "type": "string"
                 },
                 "avatar": {
@@ -490,89 +649,52 @@ const docTemplate = `{
                     "description": "帐号状态（0正常 1停用）",
                     "type": "integer"
                 },
-                "userName": {
-                    "description": "用户名",
-                    "type": "string"
-                },
                 "userType": {
                     "description": "用户类型（0普通账号，1超级管理员）",
                     "type": "integer"
                 }
             }
         },
-        "dto.SysUserVo": {
+        "dto.TableInfoVo": {
             "type": "object",
             "properties": {
-                "account": {
-                    "description": "用户账号",
+                "businessName": {
+                    "description": "业务名称",
                     "type": "string"
                 },
-                "avatar": {
-                    "description": "头像地址",
-                    "type": "string"
-                },
-                "email": {
-                    "description": "用户邮箱",
-                    "type": "string"
-                },
-                "nickName": {
-                    "description": "用户昵称",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "密码",
-                    "type": "string"
-                },
-                "phone": {
-                    "description": "手机号码",
-                    "type": "string"
-                },
-                "remark": {
-                    "description": "备注",
-                    "type": "string"
-                },
-                "sex": {
-                    "description": "用户性别（0未知，1男，2女）",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "帐号状态（0正常 1停用）",
-                    "type": "integer"
-                },
-                "userType": {
-                    "description": "用户类型（0普通账号，1超级管理员）",
-                    "type": "integer"
-                }
-            }
-        },
-        "dto.TableInfoResponse": {
-            "type": "object",
-            "properties": {
                 "columnList": {
+                    "description": "字段列表",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.SysGenTableColumn"
                     }
                 },
                 "createTime": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "functionName": {
+                    "description": "功能名称",
                     "type": "string"
                 },
                 "modelName": {
+                    "description": "实体名称",
                     "type": "string"
                 },
                 "paramName": {
+                    "description": "参数名称",
                     "type": "string"
                 },
                 "tableComment": {
+                    "description": "表注释",
                     "type": "string"
                 },
                 "tableName": {
+                    "description": "表名称",
                     "type": "string"
                 },
                 "updateTime": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -685,7 +807,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "系统模块",
-	Description:      "gin-fast-admin 接口文档",
+	Description:      "go-fast-admin 接口文档",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

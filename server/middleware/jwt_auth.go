@@ -1,12 +1,14 @@
 package middleware
 
 import (
-	"gin-fast-admin/server/common/dto/response"
-	"gin-fast-admin/server/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-fast-admin/server/common/dto/response"
+	"go-fast-admin/server/utils"
 	"net/http"
 )
 
+// JwtAuth 验证token
 func JwtAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		tokenStr := context.Request.Header.Get("Authorization")
@@ -17,12 +19,22 @@ func JwtAuth() gin.HandlerFunc {
 		}
 
 		// 解析token
-		claims, err := utils.ParseToken(tokenStr)
+		token, err := utils.ParseToken(tokenStr)
 		if err != nil {
 			response.FailWithCode(http.StatusUnauthorized, "无权限访问，错误token", context)
 			context.Abort() //结束后续操作
 			return
 		}
+
+		// 获取 token 中的 claims
+		claims, ok := token.Claims.(*utils.UserAuthClaims)
+		if !ok {
+			context.JSON(http.StatusForbidden, "无权限访问，错误token")
+			context.Abort()
+			return
+		}
+		fmt.Println("获取 token 中的 claims")
+		fmt.Println(claims)
 		context.Set("claims", claims)
 		context.Next()
 	}

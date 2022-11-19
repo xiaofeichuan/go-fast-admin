@@ -1,9 +1,9 @@
 
 # jwt config
 jwt:
-  issuer: 'gin-fast-admin'
+  issuer: 'go-fast-admin'
 
 # 数据库配置
 database:
   # 默认数据库
-  default: 'root:123456@tcp(127.0.0.1:3306)/gin_fast_admin?charset=utf8mb4&parseTime=True&loc=Local'
+  default: 'root:123456@tcp(127.0.0.1:3306)/go_fast_admin?charset=utf8mb4&parseTime=True&loc=Local'
