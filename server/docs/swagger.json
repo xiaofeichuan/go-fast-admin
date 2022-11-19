@@ -55,7 +55,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.JsonResult"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.JsonResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.UserInfoVo"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -687,6 +699,51 @@
                 "updateTime": {
                     "description": "更新时间",
                     "type": "string"
+                }
+            }
+        },
+        "dto.UserInfoVo": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "账号",
+                    "type": "string"
+                },
+                "avatar": {
+                    "description": "头像地址",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "用户邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "编号",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "手机号码",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "sex": {
+                    "description": "用户性别（0未知，1男，2女）",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "帐号状态（0正常 1停用）",
+                    "type": "integer"
+                },
+                "userName": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "userType": {
+                    "description": "用户类型（0普通账号，1超级管理员）",
+                    "type": "integer"
                 }
             }
         },
