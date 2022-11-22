@@ -45,4 +45,5 @@ func (sysAuthApi *SysAuthApi) Login(c *gin.Context) {
 func (sysAuthApi *SysAuthApi) GetUserInfo(c *gin.Context) {
 	userInfo, err := authService.GetUserInfo(c)
 	response.Complete(userInfo, err, c)
+
 }

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go-fast-admin/server/app/admin/dto"
@@ -56,5 +58,8 @@ func (sysAuthService *SysAuthService) Login(loginDto dto.LoginDto) (token string
 func (sysAuthService *SysAuthService) GetUserInfo(c *gin.Context) (userInfo dto.UserInfoVo, err error) {
 	currentUserId := utils.GetCurrentUserId(c)
 	err = global.DB.Model(&model.SysUser{}).Where("id = ?", currentUserId).Scan(&userInfo).Error
+
+	err = global.REDIS.Set(context.Background(), "key", "value", time.Minute*20).Err()
+	fmt.Println(err)
 	return userInfo, err
 }

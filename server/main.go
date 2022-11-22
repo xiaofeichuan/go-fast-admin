@@ -19,14 +19,18 @@ import (
 // @in header
 // @name Authorization
 func main() {
+
 	//初始化配置
 	global.CONFIG = initialize.InitConfig()
 
 	//初始化数据库连接
 	global.DB = initialize.InitDB()
 
+	//初始化数据库连接
+	global.REDIS = initialize.InitRedis()
+
 	//初始化路由
-	var routers = initialize.Routers()
+	var routers = initialize.InitRouters()
 
 	//swagger文档
 	docs.SwaggerInfo.Title = "go-fast-admin"

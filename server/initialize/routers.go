@@ -7,8 +7,8 @@ import (
 	"go-fast-admin/server/middleware"
 )
 
-// Routers 初始化路由
-func Routers() *gin.Engine {
+// InitRouters 初始化路由
+func InitRouters() *gin.Engine {
 	Router := gin.Default()
 	Router.RedirectFixedPath = true
 
