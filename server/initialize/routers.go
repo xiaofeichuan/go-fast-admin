@@ -12,12 +12,14 @@ func InitRouters() *gin.Engine {
 	Router := gin.Default()
 	Router.RedirectFixedPath = true
 
+	//跨域
+	Router.Use(middleware.Cors())
+
 	adminRouter := adminRouter.AdminRouterGroup
 	exampleRouter := exampleRouter.ExampleRouterGroup
 
-	// 授权
+	//授权
 	privateGroup := Router.Group("/")
-
 	privateGroup.Use(middleware.JwtAuth())
 	{
 		adminRouter.InitSysAuthPrivateRouter(privateGroup)     //授权
@@ -25,7 +27,7 @@ func InitRouters() *gin.Engine {
 		adminRouter.InitSysGenTablePrivateRouter(privateGroup) //代码生成器
 	}
 
-	// 无授权
+	//无授权
 	publicGroup := Router.Group("")
 	{
 		adminRouter.InitSysAuthPublicRouter(publicGroup) //用户
