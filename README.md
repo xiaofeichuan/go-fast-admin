@@ -1,7 +1,7 @@
 <div align=center>
 	<img src="web/src/assets/logo-mini.svg" width="150" height="150" />
     <br/>
-    <h1>GoFastAdmin</h1>
+    <h1>GoFastAdmin1</h1>
     <h4>基于Go+Vue开发的权限管理系统</h4>
 </div>
 
