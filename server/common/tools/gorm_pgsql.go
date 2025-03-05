@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"fmt"
 	"go-fast-admin/server/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -27,7 +26,8 @@ func (g *GormPgSQLTool) InitDB() *gorm.DB {
 	})
 
 	if err != nil {
-		fmt.Println("连接数据库出现错误：" + err.Error())
+		//PgSQL connection error
+		panic(err)
 	}
 	return db
 }

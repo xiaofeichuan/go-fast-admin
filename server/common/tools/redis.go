@@ -25,9 +25,10 @@ func InitRedis() *redis.Client {
 	})
 	pong, err := rdb.Ping(ctx).Result()
 	if err != nil {
-		fmt.Println("连接Redis出现错误：" + err.Error())
+		//Redis connection error
+		panic(err)
 	} else {
-		fmt.Println("连接Redis成功:" + pong)
+		fmt.Println("Redis connection successful，" + pong)
 	}
 	return rdb
 }

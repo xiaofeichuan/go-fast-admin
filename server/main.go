@@ -29,11 +29,11 @@ func main() {
 	//初始化数据库连接
 	global.DB = tools.Gorm.Database().InitDB()
 
+	//初始redis连接
+	tools.InitRedis()
+
 	//初始化路由
 	var routers = router.InitRouters()
-
-	//初始化数据库连接
-	tools.InitRedis()
 
 	// 初始化swagger文档
 	InitSwagger(routers)

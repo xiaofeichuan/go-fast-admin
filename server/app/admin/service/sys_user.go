@@ -59,6 +59,7 @@ func (s *SysUserService) Add(addDto dto.SysUserAddDto) error {
 		UserType: 0,
 		Email:    addDto.Email,
 		Phone:    addDto.Phone,
+		Salt:     salt,
 		Password: pwd,
 		Gender:   addDto.Gender,
 		Status:   addDto.Status,
