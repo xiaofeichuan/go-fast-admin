@@ -22,28 +22,28 @@
 			</el-form>
 		</el-card>
 		<el-card shadow="hover" style="margin-top: 10px">
-			<div>
+			<!-- <div>
 				<el-button type="primary" @click="openEditDialog()" v-permission="['system_loginLog_add']" plain>
 					<el-icon>
 						<ele-Plus />
 					</el-icon>
 					新增
 				</el-button>
-			</div>
+			</div> -->
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading">
 				<el-table-column prop="id" label="编号" width="60" />
 				<el-table-column prop="userId" label="用户id" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="ipAddress" label="IP地址" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="ip" label="IP地址" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="location" label="登录位置" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="browser" label="浏览器" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="operatingSystem" label="操作系统" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="os" label="操作系统" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="loginTime" label="登录时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<!-- <el-table-column label="操作" width="100">
 					<template #default="scope">
 						<el-button text type="primary" @click="openEditDialog(scope.row)" v-permission="['system_loginLog_update']">修改</el-button>
 						<el-button text type="primary" @click="handleDel(scope.row)" v-permission="['system_loginLog_delete']">删除</el-button>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 			</el-table>
 			<el-pagination
 				@size-change="handleSizeChange"
@@ -82,8 +82,8 @@ const state = reactive({
 		param: {
 			pageNum: 1,
 			pageSize: 10,
-			startLoginTime: '',
-			endLoginTime: '',
+			startTime: '',
+			endTime: '',
 		},
 	},
 });
@@ -95,6 +95,7 @@ onMounted(() => {
 
 // 重置
 const resetQueryForm = () => {
+	debugger
 	queryFormRef.value?.resetFields();
 	handleQuery();
 };
@@ -102,8 +103,8 @@ const resetQueryForm = () => {
 // 初始化表格数据
 const handleQuery = () => {
 	state.tableData.loading = true;
-	state.tableData.param.startLoginTime = state.tableData.loginTime[0]
-	state.tableData.param.endLoginTime = state.tableData.loginTime[1]
+	state.tableData.param.startTime = state.tableData.loginTime[0]
+	state.tableData.param.endTime = state.tableData.loginTime[1]
 	loginLogApi.query(state.tableData.param).then((res) => {
 		if (res.success) {
 			state.tableData.data = res.data.list;
@@ -112,28 +113,28 @@ const handleQuery = () => {
 		}
 	});
 };
-// 打开编辑弹窗
-const openEditDialog = (row?: any) => {
-	editFormRef.value.openDialog(row);
-};
+// // 打开编辑弹窗
+// const openEditDialog = (row?: any) => {
+// 	editFormRef.value.openDialog(row);
+// };
 
-// 删除
-const handleDel = (row: any) => {
-	ElMessageBox.confirm(`是否删除此记录?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(() => {
-			loginLogApi.delete({ id: row.id }).then((res) => {
-				if (res.success) {
-					handleQuery();
-					ElMessage.success('删除成功');
-				}
-			});
-		})
-		.catch(() => {});
-};
+// // 删除
+// const handleDel = (row: any) => {
+// 	ElMessageBox.confirm(`是否删除此记录?`, '提示', {
+// 		confirmButtonText: '确认',
+// 		cancelButtonText: '取消',
+// 		type: 'warning',
+// 	})
+// 		.then(() => {
+// 			loginLogApi.delete({ id: row.id }).then((res) => {
+// 				if (res.success) {
+// 					handleQuery();
+// 					ElMessage.success('删除成功');
+// 				}
+// 			});
+// 		})
+// 		.catch(() => {});
+// };
 
 // 分页改变
 const handleSizeChange = (val: number) => {
