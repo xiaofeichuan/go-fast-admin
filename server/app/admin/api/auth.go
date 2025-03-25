@@ -2,11 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mssola/useragent"
 	"go-fast-admin/server/app/admin/dto"
 	"go-fast-admin/server/common/dto/response"
 )
 
-type SysAuthApi struct{}
+type AuthApi struct{}
 
 // GenerateCaptcha
 // @Tags 授权
@@ -14,7 +15,7 @@ type SysAuthApi struct{}
 // @Security ApiKeyAuth
 // @Success 200 {object} response.JsonResult{data=dto.CaptchaVo}
 // @Router /system/auth/captcha [get]
-func (*SysAuthApi) GenerateCaptcha(c *gin.Context) {
+func (*AuthApi) GenerateCaptcha(c *gin.Context) {
 	id, b64s, err := authService.GenerateCaptcha()
 	response.Complete(dto.CaptchaVo{CaptchaId: id, CaptchaBase64: b64s}, err, c)
 }
@@ -26,10 +27,22 @@ func (*SysAuthApi) GenerateCaptcha(c *gin.Context) {
 // @Param data body dto.LoginDto true "请求参数"
 // @Success 200 {object} response.JsonResult
 // @Router /system/auth/login [post]
-func (*SysAuthApi) Login(c *gin.Context) {
+func (*AuthApi) Login(c *gin.Context) {
 	var loginDto dto.LoginDto
 	c.ShouldBindJSON(&loginDto)
-	token, err := authService.Login(loginDto)
+	token, userId, err := authService.Login(loginDto)
+	if err == nil {
+		ua := useragent.New(c.Request.UserAgent())
+		browserName, browserVersion := ua.Browser()
+		loginLogService.Add(dto.SysLoginLogAddDto{
+			UserId:   userId,
+			Ip:       c.ClientIP(),
+			Location: "",
+			Browser:  browserName + "/" + browserVersion,
+			OS:       ua.OS(),
+		})
+	}
+
 	response.Complete(token, err, c)
 }
 
@@ -39,7 +52,7 @@ func (*SysAuthApi) Login(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Success 200 {object} response.JsonResult{data=dto.UserInfoVo}
 // @Router /system/auth/userInfo [get]
-func (*SysAuthApi) GetUserInfo(c *gin.Context) {
+func (*AuthApi) GetUserInfo(c *gin.Context) {
 	userInfo, err := authService.GetUserInfo(c)
 	response.Complete(userInfo, err, c)
 
@@ -51,7 +64,7 @@ func (*SysAuthApi) GetUserInfo(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Success 200 {object} response.JsonResult{data=[]dto.AuthMenuVo}
 // @Router /system/auth/menu [get]
-func (*SysAuthApi) GetAuthMenu(c *gin.Context) {
+func (*AuthApi) GetAuthMenu(c *gin.Context) {
 	authMenu, err := authService.GetAuthMenu(c)
 	response.Complete(authMenu, err, c)
 }
@@ -63,7 +76,7 @@ func (*SysAuthApi) GetAuthMenu(c *gin.Context) {
 // @Param data body dto.UpdatePwdDto true "请求参数"
 // @Success 200 {object} response.JsonResult
 // @Router /system/auth/updatePwd [post]
-func (*SysAuthApi) UpdatePwd(c *gin.Context) {
+func (*AuthApi) UpdatePwd(c *gin.Context) {
 	var updatePwdDto dto.UpdatePwdDto
 	c.ShouldBindJSON(&updatePwdDto)
 	err := authService.UpdatePwd(c, updatePwdDto)

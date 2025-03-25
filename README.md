@@ -21,8 +21,11 @@
 # 进入服务端
 cd server
 
-# 初始化依赖
+# 初始化模块
 go mod init
+
+# 下载所有依赖
+go mod tidy
 
 # 启动项目
 go run main.go

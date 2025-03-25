@@ -37,34 +37,6 @@ func (sysUserApi *SysLoginLogApi) Add(c *gin.Context) {
 	response.CompleteWithMessage(err, c)
 }
 
-// Update
-// @Tags 登录日志
-// @Summary 更新登录日志
-// @Security ApiKeyAuth
-// @Param data body dto.SysLoginLogUpdateDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/loginLog/update [post]
-func (sysUserApi *SysLoginLogApi) Update(c *gin.Context) {
-	var updateDto dto.SysLoginLogUpdateDto
-	c.ShouldBindJSON(&updateDto)
-	err := loginLogService.Update(updateDto)
-	response.CompleteWithMessage(err, c)
-}
-
-// Delete
-// @Tags 登录日志
-// @Summary 删除登录日志
-// @Security ApiKeyAuth
-// @Param data body request.IdInfoDto true "请求参数"
-// @Success 200 {object} response.JsonResult
-// @Router /system/loginLog/delete [post]
-func (sysUserApi *SysLoginLogApi) Delete(c *gin.Context) {
-	var idInfoDto request.IdInfoDto
-	c.ShouldBindJSON(&idInfoDto)
-	err := loginLogService.Delete(idInfoDto.Id)
-	response.CompleteWithMessage(err, c)
-}
-
 // Detail
 // @Tags 登录日志
 // @Summary 获取登录日志详情
@@ -77,15 +49,4 @@ func (sysUserApi *SysLoginLogApi) Detail(c *gin.Context) {
 	c.ShouldBindQuery(&idInfoDto)
 	obj, err := loginLogService.Detail(idInfoDto.Id)
 	response.Complete(obj, err, c)
-}
-
-// List
-// @Tags 登录日志
-// @Summary 登录日志列表
-// @Security ApiKeyAuth
-// @Success 200 {object} response.JsonResult{data=[]dto.SysLoginLogVo}
-// @Router /system/loginLog/list [get]
-func (sysUserApi *SysLoginLogApi) List(c *gin.Context) {
-	objs, err := loginLogService.List()
-	response.Complete(objs, err, c)
 }

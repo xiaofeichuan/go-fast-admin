@@ -16,40 +16,40 @@ import (
 
 var store = base64Captcha.DefaultMemStore
 
-type SysAuthService struct{}
+type AuthService struct{}
 
 // GenerateCaptcha 生成验证码
-func (s *SysAuthService) GenerateCaptcha() (id string, b64s string, err error) {
+func (s *AuthService) GenerateCaptcha() (id string, b64s string, err error) {
 	driver := base64Captcha.NewDriverDigit(80, 240, 4, 0.7, 80)
 	captcha := base64Captcha.NewCaptcha(driver, store)
 	return captcha.Generate()
 }
 
 // Login 用户登录
-func (s *SysAuthService) Login(loginDto dto.LoginDto) (token string, err error) {
+func (s *AuthService) Login(loginDto dto.LoginDto) (token string, userId int64, err error) {
 
 	if loginDto.CaptchaId == "" || loginDto.CaptchaCode == "" {
-		return "", errors.New("验证码错误")
+		return "", 0, errors.New("验证码错误")
 	}
 
 	if !store.Verify(loginDto.CaptchaId, loginDto.CaptchaCode, true) {
-		return "", errors.New("验证码错误")
+		return "", 0, errors.New("验证码错误")
 	}
 
 	var user model.SysUser
 
 	err = global.DB.Where("user_name = ?", loginDto.UserName).First(&user).Error
 	if err != nil {
-		return "", errors.New("账号不存在")
+		return "", 0, errors.New("账号不存在")
 	}
 
 	if user.Status == consts.UserStatusDisable {
-		return "", errors.New("账号已被禁用")
+		return "", 0, errors.New("账号已被禁用")
 	}
 
 	pwd := utils.Md5(loginDto.Password + user.Salt)
 	if pwd != user.Password {
-		return "", errors.New("密码错误")
+		return "", 0, errors.New("密码错误")
 	}
 
 	//生成token
@@ -61,11 +61,11 @@ func (s *SysAuthService) Login(loginDto dto.LoginDto) (token string, err error) 
 	}
 	token, err = utils.GenerateToken(claims, time.Now().AddDate(0, 0, 1))
 
-	return token, err
+	return token, user.Id, err
 }
 
 // GetUserInfo 获取用户信息
-func (s *SysAuthService) GetUserInfo(c *gin.Context) (userInfo dto.UserInfoVo, err error) {
+func (s *AuthService) GetUserInfo(c *gin.Context) (userInfo dto.UserInfoVo, err error) {
 	currentUserId := utils.GetUserId(c)
 
 	//查询用户信息
@@ -116,7 +116,7 @@ func GetUserPermission(userId int64) (permissions []dto.UserPermissionVo) {
 }
 
 // GetAuthMenu 获取用户菜单路由
-func (s *SysAuthService) GetAuthMenu(c *gin.Context) (authMenu []dto.AuthMenuVo, err error) {
+func (s *AuthService) GetAuthMenu(c *gin.Context) (authMenu []dto.AuthMenuVo, err error) {
 
 	var currentUserId = utils.GetUserId(c)
 
@@ -186,7 +186,7 @@ func BuildAuthMenuTree(menuList []model.SysMenu, parentId int64) (menus []dto.Au
 }
 
 // UpdatePwd 修改密码
-func (s *SysAuthService) UpdatePwd(c *gin.Context, updatePwdDto dto.UpdatePwdDto) error {
+func (s *AuthService) UpdatePwd(c *gin.Context, updatePwdDto dto.UpdatePwdDto) error {
 	var user model.SysUser
 	currentUserId := utils.GetUserId(c)
 	err := global.DB.Model(&model.SysUser{}).Where("id = ?", currentUserId).Scan(&user).Error

@@ -8,18 +8,17 @@ import (
 // SysLoginLogQuery 查询
 type SysLoginLogQuery struct {
 	request.PageQuery
-	StartLoginTime string `form:"startLoginTime"` //开始登录时间
-	EndLoginTime   string `form:"endLoginTime"`   //结束登录时间
+	StartTime string `form:"startTime"` //开始登录时间
+	EndTime   string `form:"endTime"`   //结束登录时间
 }
 
 // SysLoginLogAddDto 创建
 type SysLoginLogAddDto struct {
-	UserId          int64     `json:"userId"`          //用户id
-	LoginTime       time.Time `json:"loginTime"`       //登录时间
-	IpAddress       string    `json:"ipAddress"`       //IP地址
-	Location        string    `json:"location"`        //登录位置
-	Browser         string    `json:"browser"`         //浏览器
-	OperatingSystem string    `json:"operatingSystem"` //操作系统
+	UserId   int64  `json:"userId"`   //用户id
+	Ip       string `json:"ip"`       //IP地址
+	Location string `json:"location"` //登录位置
+	Browser  string `json:"browser"`  //浏览器
+	OS       string `json:"os"`       //操作系统
 }
 
 // SysLoginLogUpdateDto 更新
@@ -30,11 +29,11 @@ type SysLoginLogUpdateDto struct {
 
 // SysLoginLogVo 输出对象
 type SysLoginLogVo struct {
-	Id              int64     `json:"id"`              //字典id
-	UserId          int64     `json:"userId"`          //用户id
-	LoginTime       time.Time `json:"loginTime"`       //登录时间
-	IpAddress       string    `json:"ipAddress"`       //IP地址
-	Location        string    `json:"location"`        //登录位置
-	Browser         string    `json:"browser"`         //浏览器
-	OperatingSystem string    `json:"operatingSystem"` //操作系统
+	Id        int64     `json:"id"`        //字典id
+	UserId    int64     `json:"userId"`    //用户id
+	LoginTime time.Time `json:"loginTime"` //登录时间
+	Ip        string    `json:"ip"`        //IP地址
+	Location  string    `json:"location"`  //登录位置
+	Browser   string    `json:"browser"`   //浏览器
+	OS        string    `json:"os"`        //操作系统
 }

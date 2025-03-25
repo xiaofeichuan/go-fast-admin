@@ -3,7 +3,8 @@ package api
 import adminService "go-fast-admin/server/app/admin/service"
 
 var (
-	authService           = &adminService.SysAuthService{}
+	authService           = &adminService.AuthService{}
+	monitorService        = &adminService.MonitorService{}
 	configService         = &adminService.SysConfigService{}
 	dictService           = &adminService.SysDictService{}
 	dictItemService       = &adminService.SysDictItemService{}
@@ -12,6 +13,5 @@ var (
 	menuService           = &adminService.SysMenuService{}
 	genTableService       = &adminService.SysGenTableService{}
 	genTableColumnService = &adminService.SysGenTableColumnService{}
-	monitorService        = &adminService.MonitorService{}
 	loginLogService       = &adminService.SysLoginLogService{}
 )

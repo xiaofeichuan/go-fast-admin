@@ -12,7 +12,8 @@ import (
 type SystemRouter struct{}
 
 var (
-	authApi           = &api.SysAuthApi{}
+	authApi           = &api.AuthApi{}
+	monitorApi        = &api.SysMonitorApi{}
 	configApi         = &api.SysConfigApi{}
 	dictApi           = &api.SysDictApi{}
 	dictItemApi       = &api.SysDictItemApi{}
@@ -21,7 +22,6 @@ var (
 	roleApi           = &api.SysRoleApi{}
 	genTableApi       = &api.SysGenTableApi{}
 	genTableColumnApi = &api.SysGenTableColumnApi{}
-	monitorApi        = &api.SysMonitorApi{}
 	loginLogApi       = &api.SysLoginLogApi{}
 )
 
@@ -147,11 +147,8 @@ func (s *SystemRouter) InitPrivateRouter(routerGroup *gin.RouterGroup) {
 	//登录日志
 	loginLogRouter := routerGroup.Group("system/loginLog")
 	{
-		loginLogRouter.GET("query", loginLogApi.Query)    // 登录日志分页查询
-		loginLogRouter.POST("add", loginLogApi.Add)       // 添加登录日志
-		loginLogRouter.POST("update", loginLogApi.Update) // 更新登录日志
-		loginLogRouter.POST("delete", loginLogApi.Delete) // 删除登录日志
-		loginLogRouter.GET("detail", loginLogApi.Detail)  // 登录日志详情
-		loginLogRouter.GET("list", loginLogApi.List)      // 登录日志列表
+		loginLogRouter.GET("query", loginLogApi.Query)   // 登录日志分页查询
+		loginLogRouter.POST("add", loginLogApi.Add)      // 添加登录日志
+		loginLogRouter.GET("detail", loginLogApi.Detail) // 登录日志详情
 	}
 }
