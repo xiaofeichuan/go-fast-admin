@@ -1,0 +1,42 @@
+package dto
+
+import "go-fast-admin/server/common/dto/request"
+
+// {{.ModelName}}Query 查询
+type {{.ModelName}}Query struct {
+	request.PageQuery
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsQuery }}
+		{{- if eq $item.ComponentType "DateTimePicker" }}
+	Start{{$item.CodeField}} string `form:"start{{$item.CodeField}}"`   //开始{{$item.ColumnDescription}}
+	End{{$item.CodeField}} string `form:"end{{$item.CodeField}}"`   //结束{{$item.ColumnDescription}}
+		{{- else }}
+	{{$item.CodeField}}   {{$item.CodeType}} `form:"{{$item.ParamName}}"`   //{{$item.ColumnDescription}}
+		{{- end }}
+	{{- end }}
+{{- end }}
+}
+
+// {{.ModelName}}AddDto 创建
+type {{.ModelName}}AddDto struct {
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsEdit  }}
+	{{$item.CodeField}}   {{$item.CodeType}} `json:"{{$item.ParamName}}"`   //{{$item.ColumnDescription}}
+	{{- end }}
+{{- end }}
+}
+
+// {{.ModelName}}UpdateDto 更新
+type {{.ModelName}}UpdateDto struct {
+	Id int64 `json:"id"` //编号
+	{{.ModelName}}AddDto
+}
+
+// {{.ModelName}}Vo 输出对象
+type {{.ModelName}}Vo struct {
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsList  }}
+	{{$item.CodeField}}   {{$item.CodeType}} `json:"{{$item.ParamName}}"`   //{{$item.ColumnDescription}}
+	{{- end }}
+{{- end }}
+}

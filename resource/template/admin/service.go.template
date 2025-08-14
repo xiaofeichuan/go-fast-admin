@@ -1,0 +1,84 @@
+package service
+
+import (
+	"go-fast-admin/server/app/admin/dto"
+	"go-fast-admin/server/app/admin/model"
+	"go-fast-admin/server/global"
+)
+
+type {{.ModelName}}Service struct{}
+
+// Query {{.TableDescription}}查询
+func (s *{{.ModelName}}Service) Query(query dto.{{.ModelName}}Query) (list []dto.{{.ModelName}}Vo, total int64, err error) {
+	db := global.DB.Model(&model.{{.ModelName}}{})
+
+	//查询条件
+	{{- range $index, $item := .ColumnList }}
+		{{- if $item.IsQuery  }}
+			{{- if eq $item.ComponentType "DateTimePicker" }}
+	if query.Start{{$item.CodeField}} != "" && query.End{{$item.CodeField}} != "" {
+		db = db.Where("`{{$item.ColumnName}}` BETWEEN ? and ?", query.Start{{$item.CodeField}}, query.End{{$item.CodeField}})
+	}
+			{{- else }}
+	if query.{{$item.CodeField}}  != "" {
+		db = db.Where("`{{$item.ColumnName}}` LIKE ?", "%"+query.{{$item.CodeField}} +"%")
+	}
+			{{- end }}
+		{{- end }}
+	{{- end }}
+
+	//总条数
+	db.Count(&total)
+
+	//查询数据
+	offset := (query.PageNum - 1) * query.PageSize
+	err = db.Order("id DESC").Offset(offset).Limit(query.PageSize).Find(&list).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return list, total, err
+}
+
+// Add 添加{{.TableDescription}}
+func (s *{{.ModelName}}Service) Add(addDto dto.{{.ModelName}}AddDto) error {
+	var model = &model.{{.ModelName}}{
+{{- range $index, $item := .ColumnList -}}
+	{{- if $item.IsEdit  }}
+		{{$item.CodeField}} :  addDto.{{$item.CodeField}},
+	{{- end }}
+{{- end }}
+	}
+	err := global.DB.Create(model).Error
+	return err
+}
+
+// Update 更新{{.TableDescription}}
+func (s *{{.ModelName}}Service) Update(updateDto dto.{{.ModelName}}UpdateDto) error {
+	err := global.DB.Model(&model.{{.ModelName}}{}).Where("id = ?", updateDto.Id).Updates(map[string]interface{}{
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsEdit  }}
+		"{{$item.CodeField}}" :  updateDto.{{$item.CodeField}},
+	{{- end }}
+{{- end }}
+	}).Error
+	return err
+}
+
+// Detail 获取{{.TableDescription}}详情
+func (s *{{.ModelName}}Service) Detail(id int64) (obj dto.{{.ModelName}}Vo, err error) {
+	err = global.DB.Model(&model.{{.ModelName}}{}).Where("id = ?", id).Scan(&obj).Error
+	return obj, err
+}
+
+// Delete 删除{{.TableDescription}}
+func (s *{{.ModelName}}Service) Delete(id int64) error {
+	err := global.DB.Delete(&model.{{.ModelName}}{}, "id = ?", id).Error
+	return err
+}
+
+// List {{.TableDescription}}列表
+func (s *{{.ModelName}}Service) List() (objs []dto.{{.ModelName}}Vo, err error) {
+	err = global.DB.Model(&model.{{.ModelName}}{}).Scan(&objs).Error
+	return objs, err
+}

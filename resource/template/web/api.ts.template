@@ -1,0 +1,79 @@
+import request from '/@/utils/request';
+
+/**
+ * {{.TableDescription}}
+ */
+ class {{.ModuleAlias}}Api {
+	/**
+	 * {{.TableDescription}}查询
+	 * @param parameter 
+	 * @returns 
+	 */
+	query(parameter:any) {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/query',
+			method: 'get',
+			params: parameter
+		});
+	}
+	/**
+	 * 新增{{.TableDescription}}
+	 * @param parameter 
+	 * @returns 
+	 */
+	 add(parameter:any) {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/add',
+			method: 'post',
+			data: parameter
+		});
+	}
+	/**
+	 * 更新{{.TableDescription}}
+	 * @param parameter 
+	 * @returns 
+	 */
+	 update(parameter:any) {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/update',
+			method: 'post',
+			data: parameter
+		});
+	}
+	/**
+	 * 删除{{.TableDescription}}
+	 * @param parameter 
+	 * @returns 
+	 */
+	 delete(parameter:any) {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/delete',
+			method: 'post',
+			data: parameter
+		});
+	}
+	/**
+	 * {{.TableDescription}}详情
+	 * @param parameter 
+	 * @returns 
+	 */
+	 detail(parameter:any) {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/detail',
+			method: 'get',
+			params: parameter
+		});
+	}
+	/**
+	 * {{.TableDescription}}列表
+	 * @returns 
+	 */
+	 list() {
+		return request({
+			url: '/{{.BusinessName}}/{{.ModuleName}}/list',
+			method: 'get',
+		});
+	}
+}
+
+export default new {{.ModuleAlias}}Api()

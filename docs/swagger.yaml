@@ -1,0 +1,2435 @@
+definitions:
+  consts.ConfigStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      ConfigStatusEnable: 启用
+    x-enum-varnames:
+    - ConfigStatusEnable
+  consts.DictItemStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      DictItemStatusEnable: 启用
+    x-enum-varnames:
+    - DictItemStatusEnable
+  consts.DictStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      DictStatusEnable: 启用
+    x-enum-varnames:
+    - DictStatusEnable
+  consts.DictType:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      DictTypeInt: int
+    x-enum-varnames:
+    - DictTypeInt
+  consts.MenuStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      MenuStatusEnable: 启用
+    x-enum-varnames:
+    - MenuStatusEnable
+  consts.MenuType:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-comments:
+      MenuTypeCatalog: 目录
+      MenuTypeMenu: 菜单
+    x-enum-varnames:
+    - MenuTypeCatalog
+    - MenuTypeMenu
+  consts.RoleStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      RoleStatusEnable: 启用
+    x-enum-varnames:
+    - RoleStatusEnable
+  consts.UserGender:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      UserGenderNone: 未知
+    x-enum-varnames:
+    - UserGenderNone
+  consts.UserStatus:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      UserStatusEnable: 启用
+    x-enum-varnames:
+    - UserStatusEnable
+  consts.UserType:
+    enum:
+    - 0
+    type: integer
+    x-enum-comments:
+      UserTypeGeneral: 普通用户
+    x-enum-varnames:
+    - UserTypeGeneral
+  dto.AuthMenuVo:
+    properties:
+      children:
+        description: 子菜单
+        items:
+          $ref: '#/definitions/dto.AuthMenuVo'
+        type: array
+      component:
+        description: 组件路径
+        type: string
+      meta:
+        allOf:
+        - $ref: '#/definitions/dto.MenuRouterMetaVo'
+        description: Mate
+      name:
+        description: 路由名称（TODO：暂时不清楚前端这个字段有什么用处）
+        type: string
+      path:
+        description: 路由地址
+        type: string
+    type: object
+  dto.CaptchaVo:
+    properties:
+      captchaBase64:
+        type: string
+      captchaId:
+        type: string
+    type: object
+  dto.DictItemVo:
+    properties:
+      dictItemName:
+        description: 选项名称
+        type: string
+      dictItemValue:
+        description: 选项值
+    type: object
+  dto.LoginDto:
+    properties:
+      captchaCode:
+        description: 验证码
+        type: string
+      captchaId:
+        description: 验证码ID
+        type: string
+      password:
+        description: 密码
+        type: string
+      userName:
+        description: 用户账号
+        type: string
+    type: object
+  dto.MenuRouterMetaVo:
+    properties:
+      icon:
+        description: 菜单图标
+        type: string
+      isAffix:
+        description: 是否固定在 tagsView 栏上
+        type: boolean
+      isHide:
+        description: 是否隐藏
+        type: boolean
+      isIframe:
+        description: 是否内嵌
+        type: boolean
+      isKeepAlive:
+        description: 是否缓存
+        type: boolean
+      isLink:
+        description: 外部地址
+        type: string
+      title:
+        description: 菜单标题
+        type: string
+    type: object
+  dto.ResetPwdDto:
+    properties:
+      password:
+        description: 密码
+        type: string
+      userId:
+        description: 用户Id
+        type: integer
+    type: object
+  dto.SetUserStateDto:
+    properties:
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.UserStatus'
+        description: 帐号状态（0正常 1停用）
+      userId:
+        description: 用户Id
+        type: integer
+    type: object
+  dto.SysConfigAddDto:
+    properties:
+      configKey:
+        description: 配置键名
+        type: string
+      configName:
+        description: 配置名称
+        type: string
+      configValue:
+        description: 配置键值
+        type: string
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.ConfigStatus'
+        description: 配置状态（0正常 1停用）
+    type: object
+  dto.SysConfigUpdateDto:
+    properties:
+      configKey:
+        description: 配置键名
+        type: string
+      configName:
+        description: 配置名称
+        type: string
+      configValue:
+        description: 配置键值
+        type: string
+      id:
+        description: 编号
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.ConfigStatus'
+        description: 配置状态（0正常 1停用）
+    type: object
+  dto.SysConfigVo:
+    properties:
+      configKey:
+        description: 配置键名
+        type: string
+      configName:
+        description: 配置名称
+        type: string
+      configValue:
+        description: 配置键值
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 配置id
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.ConfigStatus'
+        description: 配置状态（0正常 1停用）
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysDictAddDto:
+    properties:
+      dictCode:
+        description: 字典代码
+        type: string
+      dictName:
+        description: 字典名称
+        type: string
+      dictType:
+        allOf:
+        - $ref: '#/definitions/consts.DictType'
+        description: 字典类型（0int，1string）
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictStatus'
+        description: 字典状态（0正常 1停用）
+    type: object
+  dto.SysDictItemAddDto:
+    properties:
+      dictId:
+        description: 字典id
+        type: integer
+      dictItemName:
+        description: 选项名称
+        type: string
+      dictItemValue:
+        description: 选项值
+        type: string
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictItemStatus'
+        description: 配置状态（0正常 1停用）
+    type: object
+  dto.SysDictItemUpdateDto:
+    properties:
+      dictId:
+        description: 字典id
+        type: integer
+      dictItemName:
+        description: 选项名称
+        type: string
+      dictItemValue:
+        description: 选项值
+        type: string
+      id:
+        description: 编号
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictItemStatus'
+        description: 配置状态（0正常 1停用）
+    type: object
+  dto.SysDictItemVo:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      dictId:
+        description: 字典id
+        type: integer
+      dictItemName:
+        description: 选项名称
+        type: string
+      dictItemValue:
+        description: 选项值
+        type: string
+      id:
+        description: 编号
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictItemStatus'
+        description: 配置状态（0正常 1停用）
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysDictUpdateDto:
+    properties:
+      dictCode:
+        description: 字典代码
+        type: string
+      dictName:
+        description: 字典名称
+        type: string
+      dictType:
+        allOf:
+        - $ref: '#/definitions/consts.DictType'
+        description: 字典类型（0int，1string）
+      id:
+        description: 编号
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictStatus'
+        description: 字典状态（0正常 1停用）
+    type: object
+  dto.SysDictVo:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      dictCode:
+        description: 字典代码
+        type: string
+      dictName:
+        description: 字典名称
+        type: string
+      dictType:
+        allOf:
+        - $ref: '#/definitions/consts.DictType'
+        description: 字典类型（0int，1string）
+      id:
+        description: 编号
+        type: integer
+      items:
+        description: 选项
+        items:
+          $ref: '#/definitions/dto.DictItemVo'
+        type: array
+      remark:
+        description: 备注
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.DictStatus'
+        description: 字典状态（0正常 1停用）
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysGenTableAddDto:
+    properties:
+      businessName:
+        description: 业务名称
+        type: string
+      menuParentId:
+        description: 上级菜单
+        type: integer
+      modelName:
+        description: 实体名称
+        type: string
+      moduleName:
+        description: 模块名称
+        type: string
+      tableDescription:
+        description: 表描述
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+    type: object
+  dto.SysGenTableColumnVo:
+    properties:
+      codeField:
+        description: 代码字段
+        type: string
+      codeType:
+        description: 代码类型
+        type: string
+      columnDescription:
+        description: 字段描述
+        type: string
+      columnName:
+        description: 字段名
+        type: string
+      columnType:
+        description: 字段类型
+        type: string
+      componentType:
+        description: 组件类型
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      dictCode:
+        description: 字典代码
+        type: string
+      id:
+        description: Id
+        type: integer
+      isEdit:
+        description: 是否编辑字段（0否 1是）
+        type: boolean
+      isList:
+        description: 是否列表字段（0否 1是）
+        type: boolean
+      isPk:
+        description: 是否主键（0否 1是）
+        type: boolean
+      isQuery:
+        description: 是否查询字段（0否 1是）
+        type: boolean
+      paramName:
+        description: 参数名称
+        type: string
+      queryMethod:
+        description: 查询方式
+        type: string
+      tableId:
+        description: 表编号
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysGenTableUpdateDto:
+    properties:
+      businessName:
+        description: 业务名称
+        type: string
+      id:
+        description: 编号
+        type: integer
+      menuParentId:
+        description: 上级菜单
+        type: integer
+      modelName:
+        description: 实体名称
+        type: string
+      moduleName:
+        description: 模块名称
+        type: string
+      tableDescription:
+        description: 表描述
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+    type: object
+  dto.SysGenTableVo:
+    properties:
+      businessName:
+        description: 业务名称
+        type: string
+      columnList:
+        description: 字段列表
+        items:
+          $ref: '#/definitions/dto.SysGenTableColumnVo'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      menuParentId:
+        description: 上级菜单
+        type: integer
+      modelName:
+        description: 实体名称
+        type: string
+      moduleAlias:
+        description: 模块别名
+        type: string
+      moduleName:
+        description: 模块名称
+        type: string
+      tableDescription:
+        description: 表描述
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysLoginLogAddDto:
+    properties:
+      browser:
+        description: 浏览器
+        type: string
+      ipAddress:
+        description: IP地址
+        type: string
+      location:
+        description: 登录位置
+        type: string
+      loginTime:
+        description: 登录时间
+        type: string
+      operatingSystem:
+        description: 操作系统
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  dto.SysLoginLogUpdateDto:
+    properties:
+      browser:
+        description: 浏览器
+        type: string
+      id:
+        description: 编号
+        type: integer
+      ipAddress:
+        description: IP地址
+        type: string
+      location:
+        description: 登录位置
+        type: string
+      loginTime:
+        description: 登录时间
+        type: string
+      operatingSystem:
+        description: 操作系统
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  dto.SysLoginLogVo:
+    properties:
+      browser:
+        description: 浏览器
+        type: string
+      id:
+        description: 字典id
+        type: integer
+      ipAddress:
+        description: IP地址
+        type: string
+      location:
+        description: 登录位置
+        type: string
+      loginTime:
+        description: 登录时间
+        type: string
+      operatingSystem:
+        description: 操作系统
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  dto.SysMenuAddDto:
+    properties:
+      component:
+        description: 组件路径
+        type: string
+      icon:
+        description: 菜单图标
+        type: string
+      isAffix:
+        description: 是否固定tagsView
+        type: boolean
+      isCache:
+        description: 是否缓存
+        type: boolean
+      isHide:
+        description: 是否隐藏
+        type: boolean
+      isIframe:
+        description: 是否内嵌
+        type: boolean
+      link:
+        description: 外部地址
+        type: string
+      menuName:
+        description: 菜单名称
+        type: string
+      menuType:
+        allOf:
+        - $ref: '#/definitions/consts.MenuType'
+        description: 菜单类型（0菜单，1按钮）
+      parentId:
+        description: 父菜单ID
+        type: integer
+      path:
+        description: 路由地址
+        type: string
+      permission:
+        description: 按钮权限
+        type: string
+      remark:
+        description: 备注
+        type: string
+      requestMethod:
+        description: 请求方法
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.MenuStatus'
+        description: 菜单状态（0正常 1停用）
+    type: object
+  dto.SysMenuUpdateDto:
+    properties:
+      component:
+        description: 组件路径
+        type: string
+      icon:
+        description: 菜单图标
+        type: string
+      id:
+        description: 编号
+        type: integer
+      isAffix:
+        description: 是否固定tagsView
+        type: boolean
+      isCache:
+        description: 是否缓存
+        type: boolean
+      isHide:
+        description: 是否隐藏
+        type: boolean
+      isIframe:
+        description: 是否内嵌
+        type: boolean
+      link:
+        description: 外部地址
+        type: string
+      menuName:
+        description: 菜单名称
+        type: string
+      menuType:
+        allOf:
+        - $ref: '#/definitions/consts.MenuType'
+        description: 菜单类型（0菜单，1按钮）
+      parentId:
+        description: 父菜单ID
+        type: integer
+      path:
+        description: 路由地址
+        type: string
+      permission:
+        description: 按钮权限
+        type: string
+      remark:
+        description: 备注
+        type: string
+      requestMethod:
+        description: 请求方法
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.MenuStatus'
+        description: 菜单状态（0正常 1停用）
+    type: object
+  dto.SysMenuVo:
+    properties:
+      children:
+        description: 子菜单
+        items:
+          $ref: '#/definitions/dto.SysMenuVo'
+        type: array
+      component:
+        description: 组件路径
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      icon:
+        description: 菜单图标
+        type: string
+      id:
+        description: 编号
+        type: integer
+      isAffix:
+        description: 是否固定tagsView
+        type: boolean
+      isCache:
+        description: 是否缓存
+        type: boolean
+      isHide:
+        description: 是否隐藏
+        type: boolean
+      isIframe:
+        description: 是否内嵌
+        type: boolean
+      link:
+        description: 外部地址
+        type: string
+      menuName:
+        description: 菜单名称
+        type: string
+      menuType:
+        allOf:
+        - $ref: '#/definitions/consts.MenuType'
+        description: 菜单类型（0菜单，1按钮）
+      parentId:
+        description: 父菜单ID
+        type: integer
+      path:
+        description: 路由地址
+        type: string
+      permission:
+        description: 按钮权限
+        type: string
+      remark:
+        description: 备注
+        type: string
+      requestMethod:
+        description: 请求方法
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.MenuStatus'
+        description: 菜单状态（0正常 1停用）
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysRoleAddDto:
+    properties:
+      menuIds:
+        description: 角色菜单
+        items:
+          type: integer
+        type: array
+      remark:
+        description: 备注
+        type: string
+      roleCode:
+        description: 角色代码
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.RoleStatus'
+        description: 菜单状态（0正常 1停用）
+    type: object
+  dto.SysRoleUpdateDto:
+    properties:
+      id:
+        description: 编号
+        type: integer
+      menuIds:
+        description: 角色菜单
+        items:
+          type: integer
+        type: array
+      remark:
+        description: 备注
+        type: string
+      roleCode:
+        description: 角色代码
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.RoleStatus'
+        description: 菜单状态（0正常 1停用）
+    type: object
+  dto.SysRoleVo:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 编号
+        type: integer
+      menuIds:
+        description: 角色菜单
+        items:
+          type: integer
+        type: array
+      remark:
+        description: 备注
+        type: string
+      roleCode:
+        description: 角色代码
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.RoleStatus'
+        description: 菜单状态（0正常 1停用）
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dto.SysUserAddDto:
+    properties:
+      email:
+        description: 用户邮箱
+        type: string
+      gender:
+        allOf:
+        - $ref: '#/definitions/consts.UserGender'
+        description: 用户性别（0未知，1男，2女）
+      nickName:
+        description: 用户昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleIds:
+        description: 角色
+        items:
+          type: integer
+        type: array
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.UserStatus'
+        description: 帐号状态（0正常 1停用）
+      userName:
+        description: 用户账号
+        type: string
+    type: object
+  dto.SysUserUpdateDto:
+    properties:
+      email:
+        description: 用户邮箱
+        type: string
+      gender:
+        allOf:
+        - $ref: '#/definitions/consts.UserGender'
+        description: 用户性别（0未知，1男，2女）
+      id:
+        description: 编号
+        type: integer
+      nickName:
+        description: 用户昵称
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleIds:
+        description: 角色
+        items:
+          type: integer
+        type: array
+      status:
+        allOf:
+        - $ref: '#/definitions/consts.UserStatus'
+        description: 帐号状态（0正常 1停用）
+    type: object
+  dto.SysUserVo:
+    properties:
+      avatar:
+        description: 头像地址
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      gender:
+        allOf:
+        - $ref: '#/definitions/consts.UserGender'
+        description: 用户性别（0未知，1男，2女）
+      id:
+        description: 编号
+        type: integer
+      nickName:
+        description: 用户昵称
+        type: string
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleIds:
+        description: 角色
+        items:
+          type: integer
+        type: array
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      userName:
+        description: 用户账号
+        type: string
+      userType:
+        description: 用户类型（0普通账号，1超级管理员）
+        type: integer
+    type: object
+  dto.TableInfoVo:
+    properties:
+      businessName:
+        description: 业务名称
+        type: string
+      modelName:
+        description: 实体名称
+        type: string
+      moduleName:
+        description: 模块名称
+        type: string
+      tableDescription:
+        description: 表描述
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+    type: object
+  dto.UpdatePwdDto:
+    properties:
+      newPassword:
+        description: 新密码
+        type: string
+      password:
+        description: 密码
+        type: string
+    type: object
+  dto.UserInfoVo:
+    properties:
+      avatar:
+        description: 头像地址
+        type: string
+      email:
+        description: 用户邮箱
+        type: string
+      gender:
+        description: 用户性别（0未知，1男，2女）
+        type: integer
+      id:
+        description: 编号
+        type: integer
+      nickName:
+        description: 用户昵称
+        type: string
+      permission:
+        description: 权限
+        items:
+          type: string
+        type: array
+      phone:
+        description: 手机号码
+        type: string
+      remark:
+        description: 备注
+        type: string
+      status:
+        description: 帐号状态（0正常 1停用）
+        type: integer
+      userName:
+        description: 用户账号
+        type: string
+      userType:
+        allOf:
+        - $ref: '#/definitions/consts.UserType'
+        description: 用户类型（0普通账号，1超级管理员）
+    type: object
+  request.IdInfoDto:
+    properties:
+      id:
+        description: id编号
+        type: integer
+    type: object
+  response.JsonResult:
+    properties:
+      code:
+        description: 状态码（架构层面：中间件/异常处理等）
+        type: integer
+      data:
+        description: 数据
+      message:
+        description: 消息
+        type: string
+      success:
+        description: 是否成功（业务层面）
+        type: boolean
+    type: object
+  response.PageResult:
+    properties:
+      list:
+        description: 数据
+      totalCount:
+        description: 总条数
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: go-fast-admin 接口文档
+  title: 系统模块
+  version: 1.0.0
+paths:
+  /system/auth/captcha:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CaptchaVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 生成验证码
+      tags:
+      - 授权
+  /system/auth/login:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 用户登录
+      tags:
+      - 授权
+  /system/auth/menu:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.AuthMenuVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户菜单（树状）
+      tags:
+      - 授权
+  /system/auth/updatePwd:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePwdDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新密码
+      tags:
+      - 授权
+  /system/auth/userInfo:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserInfoVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 授权
+  /system/config/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysConfigAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加配置
+      tags:
+      - 配置
+  /system/config/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除配置
+      tags:
+      - 配置
+  /system/config/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysConfigVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取配置详情
+      tags:
+      - 配置
+  /system/config/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysConfigVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 配置列表
+      tags:
+      - 配置
+  /system/config/query:
+    get:
+      parameters:
+      - description: 配置名称
+        in: query
+        name: configName
+        type: string
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysConfigVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 配置查询
+      tags:
+      - 配置
+  /system/config/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysConfigUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新配置
+      tags:
+      - 配置
+  /system/dict/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDictAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加字典
+      tags:
+      - 字典
+  /system/dict/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除字典
+      tags:
+      - 字典
+  /system/dict/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysDictVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取字典详情
+      tags:
+      - 字典
+  /system/dict/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysDictVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 字典列表
+      tags:
+      - 字典
+  /system/dict/query:
+    get:
+      parameters:
+      - description: 字典名称
+        in: query
+        name: dictName
+        type: string
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysDictVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 字典查询
+      tags:
+      - 字典
+  /system/dict/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDictUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新字典
+      tags:
+      - 字典
+  /system/dictItem/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDictItemAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加字典选项
+      tags:
+      - 字典选项
+  /system/dictItem/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除字典选项
+      tags:
+      - 字典选项
+  /system/dictItem/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysDictItemVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取字典选项详情
+      tags:
+      - 字典选项
+  /system/dictItem/list:
+    get:
+      parameters:
+      - description: 字典id
+        in: query
+        name: dictId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysDictItemVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 字典选项列表
+      tags:
+      - 字典选项
+  /system/dictItem/query:
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysDictItemVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 字典选项查询
+      tags:
+      - 字典选项
+  /system/dictItem/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDictItemUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新字典选项
+      tags:
+      - 字典选项
+  /system/genTable/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysGenTableAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加代码生成（表）
+      tags:
+      - 代码生成（表）
+  /system/genTable/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除代码生成（表）
+      tags:
+      - 代码生成（表）
+  /system/genTable/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysGenTableVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取代码生成（表）详情
+      tags:
+      - 代码生成（表）
+  /system/genTable/previewCode:
+    get:
+      parameters:
+      - description: 表id
+        in: query
+        name: tableId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 预览代码
+      tags:
+      - 代码生成（表）
+  /system/genTable/query:
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      - description: 表名称
+        in: query
+        name: tableName
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysGenTableVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 代码生成（表）查询
+      tags:
+      - 代码生成（表）
+  /system/genTable/tableList:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.TableInfoVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取表列表
+      tags:
+      - 代码生成（表）
+  /system/genTable/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysGenTableUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新代码生成（表）
+      tags:
+      - 代码生成（表）
+  /system/genTableColumn/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysGenTableColumnVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 代码生成（表字段）列表
+      tags:
+      - 代码生成（表字段）
+  /system/genTableColumn/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SysGenTableUpdateDto'
+          type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新代码生成（表字段）
+      tags:
+      - 代码生成（表字段）
+  /system/loginLog/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysLoginLogAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加登录日志
+      tags:
+      - 登录日志
+  /system/loginLog/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除登录日志
+      tags:
+      - 登录日志
+  /system/loginLog/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysLoginLogVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取登录日志详情
+      tags:
+      - 登录日志
+  /system/loginLog/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysLoginLogVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 登录日志列表
+      tags:
+      - 登录日志
+  /system/loginLog/query:
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysLoginLogVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 登录日志查询
+      tags:
+      - 登录日志
+  /system/loginLog/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysLoginLogUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新登录日志
+      tags:
+      - 登录日志
+  /system/menu/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMenuAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加菜单
+      tags:
+      - 菜单
+  /system/menu/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除菜单
+      tags:
+      - 菜单
+  /system/menu/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysMenuVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取菜单详情
+      tags:
+      - 菜单
+  /system/menu/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysMenuVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 菜单列表
+      tags:
+      - 菜单
+  /system/menu/query:
+    get:
+      parameters:
+      - description: 菜单名称
+        in: query
+        name: menuName
+        type: string
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysMenuVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 菜单查询
+      tags:
+      - 菜单
+  /system/menu/tree:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysMenuVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 菜单树状
+      tags:
+      - 菜单
+  /system/menu/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMenuUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新菜单
+      tags:
+      - 菜单
+  /system/monitor/cacheKeys:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取缓存key
+      tags:
+      - 监控
+  /system/monitor/cacheValue:
+    get:
+      parameters:
+      - description: 缓存Key
+        in: query
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取缓存value
+      tags:
+      - 监控
+  /system/monitor/deleteCache:
+    post:
+      parameters:
+      - description: 缓存Key
+        in: query
+        name: key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除缓存
+      tags:
+      - 监控
+  /system/monitor/serverInfo:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取服务器信息
+      tags:
+      - 监控
+  /system/role/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加角色
+      tags:
+      - 角色
+  /system/role/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除角色
+      tags:
+      - 角色
+  /system/role/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysRoleVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色详情
+      tags:
+      - 角色
+  /system/role/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysRoleVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 角色列表
+      tags:
+      - 角色
+  /system/role/query:
+    get:
+      parameters:
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      - description: 角色名称
+        in: query
+        name: roleName
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysRoleVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 角色查询
+      tags:
+      - 角色
+  /system/role/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色
+      tags:
+      - 角色
+  /system/user/add:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserAddDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加用户
+      tags:
+      - 用户
+  /system/user/delete:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdInfoDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - 用户
+  /system/user/detail:
+    get:
+      parameters:
+      - description: id编号
+        in: query
+        name: id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.SysUserVo'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户详情
+      tags:
+      - 用户
+  /system/user/list:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SysUserVo'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户列表
+      tags:
+      - 用户
+  /system/user/query:
+    get:
+      parameters:
+      - description: 用户昵称
+        in: query
+        name: nickName
+        type: string
+      - description: 页码
+        in: query
+        name: pageIndex
+        type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dto.SysUserVo'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户查询
+      tags:
+      - 用户
+  /system/user/resetPwd:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ResetPwdDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 重置密码
+      tags:
+      - 用户
+  /system/user/setStatus:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SetUserStateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户状态
+      tags:
+      - 用户
+  /system/user/update:
+    post:
+      parameters:
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserUpdateDto'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JsonResult'
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户
+      tags:
+      - 用户
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

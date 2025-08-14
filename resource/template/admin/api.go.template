@@ -1,0 +1,84 @@
+package api
+
+type {{.ModelName}}Api struct{}
+
+// Query
+// @Tags {{.TableDescription}}
+// @Summary {{.TableDescription}}查询
+// @Security ApiKeyAuth
+// @Param data query dto.{{.ModelName}}Query true "请求参数"
+// @Success 200 {object} response.JsonResult{data=response.PageResult{list=[]dto.{{.ModelName}}Vo}}
+// @Router /{{.BusinessName}}/{{.ModuleName}}/query [get]
+func (sysUserApi *{{.ModelName}}Api) Query(c *gin.Context) {
+	var query dto.{{.ModelName}}Query
+	c.ShouldBindQuery(&query)
+	list, total, err := {{.ModuleName}}Service.Query(query)
+	response.Complete(response.PageResult{List: list, TotalCount: total}, err, c)
+}
+
+// Add
+// @Tags {{.TableDescription}}
+// @Summary 添加{{.TableDescription}}
+// @Security ApiKeyAuth
+// @Param data body dto.{{.ModelName}}AddDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.BusinessName}}/{{.ModuleName}}/add [post]
+func (sysUserApi *{{.ModelName}}Api) Add(c *gin.Context) {
+	var addDto dto.{{.ModelName}}AddDto
+	c.ShouldBindJSON(&addDto)
+	err := {{.ModuleName}}Service.Add(addDto)
+	response.CompleteWithMessage(err, c)
+}
+
+// Update
+// @Tags {{.TableDescription}}
+// @Summary 更新{{.TableDescription}}
+// @Security ApiKeyAuth
+// @Param data body dto.{{.ModelName}}UpdateDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.BusinessName}}/{{.ModuleName}}/update [post]
+func (sysUserApi *{{.ModelName}}Api) Update(c *gin.Context) {
+	var updateDto dto.{{.ModelName}}UpdateDto
+	c.ShouldBindJSON(&updateDto)
+	err := {{.ModuleName}}Service.Update(updateDto)
+	response.CompleteWithMessage(err, c)
+}
+
+// Detail
+// @Tags {{.TableDescription}}
+// @Summary 获取{{.TableDescription}}详情
+// @Security ApiKeyAuth
+// @Param data query request.IdInfoDto true "{{.TableDescription}}id"
+// @Success 200 {object} response.JsonResult{data=dto.{{.ModelName}}Vo}
+// @Router /{{.BusinessName}}/{{.ModuleName}}/detail [get]
+func (sysUserApi *{{.ModelName}}Api) Detail(c *gin.Context) {
+	var idInfoDto request.IdInfoDto
+	c.ShouldBindQuery(&idInfoDto)
+	obj, err := {{.ModuleName}}Service.Detail(idInfoDto.Id)
+	response.Complete(obj, err, c)
+}
+
+// Delete
+// @Tags {{.TableDescription}}
+// @Summary 删除{{.TableDescription}}
+// @Security ApiKeyAuth
+// @Param data body request.IdInfoDto true "请求参数"
+// @Success 200 {object} response.JsonResult
+// @Router /{{.BusinessName}}/{{.ModuleName}}/delete [post]
+func (sysUserApi *{{.ModelName}}Api) Delete(c *gin.Context) {
+	var idInfoDto request.IdInfoDto
+	c.ShouldBindJSON(&idInfoDto)
+	err := {{.ModuleName}}Service.Delete(idInfoDto.Id)
+	response.CompleteWithMessage(err, c)
+}
+
+// List
+// @Tags {{.TableDescription}}
+// @Summary {{.TableDescription}}列表
+// @Security ApiKeyAuth
+// @Success 200 {object} response.JsonResult{data=[]dto.{{.ModelName}}Vo}
+// @Router /{{.BusinessName}}/{{.ModuleName}}/list [get]
+func (sysUserApi *{{.ModelName}}Api) List(c *gin.Context) {
+	objs, err := {{.ModuleName}}Service.List()
+	response.Complete(objs, err, c)
+}

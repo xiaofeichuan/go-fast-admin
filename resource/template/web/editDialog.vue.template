@@ -1,0 +1,151 @@
+<template>
+	<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="750px" @close="closeDialog">
+		<el-form ref="dataFormRef" :model="state.dataForm" :rules="state.rules" size="default" label-width="90px">
+			<el-row :gutter="35">
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsEdit }}
+		{{- if eq $item.ComponentType "Textarea" }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-input v-model="state.dataForm.{{$item.ParamName}}" type="textarea" :rows="2" placeholder="请输入{{$item.ColumnDescription}}" clearable></el-input>
+					</el-form-item>
+				</el-col>       
+		{{- else if eq $item.ComponentType "Switch" }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-switch
+							v-model="state.dataForm.{{$item.ParamName}}"
+							:active-value="0"
+							:inactive-value="1"
+							inline-prompt
+							active-text="启用"
+							inactive-text="禁用"
+						></el-switch>
+					</el-form-item>
+				</el-col>
+		{{- else if eq $item.ComponentType "Select" }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-select v-model="state.dataForm.{{$item.ParamName}}" placeholder="请选择性别" clearable>
+							<el-option v-for="item in useDictData().getDictItem('{{$item.DictCode}}')" :key="item.dictItemValue"
+								:label="item.dictItemName" :value="item.dictItemValue">
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+		{{- else if eq $item.ComponentType "InputNumber" }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-input-number v-model="state.dataForm.{{$item.ParamName}}" :min="0" :max="999" controls-position="right"
+							placeholder="请输入{{$item.ColumnDescription}}"/>
+					</el-form-item>
+				</el-col>
+		{{- else if eq $item.ComponentType "DateTimePicker" }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-date-picker v-model="state.dataForm.{{$item.ParamName}}" type="datetime" style="width: 100%;"/>
+					</el-form-item>
+				</el-col>
+		{{- else }}
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+					<el-form-item label="{{$item.ColumnDescription}}" prop="{{$item.ParamName}}">
+						<el-input v-model="state.dataForm.{{$item.ParamName}}" placeholder="请输入{{$item.ColumnDescription}}" clearable></el-input>
+					</el-form-item>
+				</el-col>
+		{{- end }}
+	{{- end }}
+{{- end }}      
+			</el-row>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="closeDialog" size="default">取 消</el-button>
+				<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
+			</span>
+		</template>
+	</el-dialog>
+</template>
+
+<script setup lang="ts">
+import { reactive, ref ,nextTick} from 'vue';
+import { ElMessage } from 'element-plus';
+import {{.ModuleName}}Api from '/@/api/{{.BusinessName}}/{{.ModuleName}}';
+
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
+
+// 定义变量内容
+const dataFormRef = ref();
+const state = reactive({
+	dataForm: {
+{{- range $index, $item := .ColumnList }}
+	{{- if $item.IsEdit }}
+		{{$item.ParamName}}: undefined,// {{$item.ColumnDescription}}
+	{{- end }}
+{{- end }}
+	},
+	rules: {},
+	dialog: {
+		isShowDialog: false,
+		isEdit: false,
+		title: '',
+	},
+});
+
+// 打开弹窗
+const openDialog = (row: any) => {
+	if (row) {
+		state.dialog.isEdit = true;
+		state.dialog.title = '编辑配置';
+		nextTick(() => {
+			Object.assign(state.dataForm, row);
+		});
+	} else {
+		state.dialog.isEdit = false;
+		state.dialog.title = '添加配置';
+	}
+	state.dialog.isShowDialog = true;
+};
+
+// 关闭弹窗
+const closeDialog = () => {
+	state.dialog.isShowDialog = false;
+	// 重置表单
+	dataFormRef.value.resetFields();
+};
+
+// 提交
+const onSubmit = () => {
+	dataFormRef.value.validate(async (valid: boolean) => {
+		if (!valid) {
+			return;
+		}
+
+		if (state.dialog.isEdit) {
+			//更新
+			{{.ModuleName}}Api.update(state.dataForm).then((res) => {
+				if (res.success) {
+					ElMessage.success('更新成功');
+					emit('refresh'); //刷新页面
+					closeDialog();
+				}
+			});
+		} else {
+			//添加
+			{{.ModuleName}}Api.add(state.dataForm).then((res) => {
+				if (res.success) {
+					ElMessage.success('添加成功');
+					emit('refresh'); //刷新页面
+					closeDialog();
+				}
+			});
+		}
+	});
+};
+
+// 暴露变量
+defineExpose({
+	openDialog,
+});
+</script>
+

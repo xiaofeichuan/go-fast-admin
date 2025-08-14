@@ -1,0 +1,16 @@
+# Editor/IDE
+.idea/
+.vscode/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+
